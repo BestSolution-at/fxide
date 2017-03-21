@@ -40,6 +40,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fx.code.editor.services.EditorOpener;
 import org.eclipse.fx.core.Subscription;
+import org.eclipse.fx.core.ThreadSynchronize;
 import org.eclipse.fx.core.di.ContextValue;
 import org.eclipse.fx.core.log.Logger;
 import org.eclipse.fx.core.log.LoggerCreator;
@@ -71,6 +72,9 @@ public class PackageExplorer {
 	private List<Subscription> subscriptions = new ArrayList<>();
 	private TreeView<IResource> viewer;
 	private final EditorOpener editorOpener;
+
+	@Inject
+	private ThreadSynchronize threadSync;
 
 	@Inject
 	public PackageExplorer(@ContextValue(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) Property<IResource> packageExplorerSelection, EditorOpener editorOpener) {
@@ -112,11 +116,19 @@ public class PackageExplorer {
 	}
 
 	private void handleResourceChanged(IResourceChangeEvent event) {
-		try {
-			event.getDelta().accept(this::visitDelta);
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Runnable code = () -> {
+			try {
+				event.getDelta().accept(this::visitDelta);
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		};
+
+		if( threadSync.isCurrent() ) {
+			code.run();
+		} else {
+			threadSync.asyncExec( code );
 		}
 	}
 
@@ -153,8 +165,14 @@ public class PackageExplorer {
 					item.getChildren().add(new ContainerItem(ContainerType.PACKAGE, (IContainer) delta.getResource()));
 				}
 			}
-		} else {
+		} else if( delta.getKind() == IResourceDelta.REMOVED ) {
+			Optional<TreeItem<IResource>> opItem = getParentItem(delta.getResource());
 
+			if( opItem.isPresent() ) {
+				opItem.get().getChildren().removeIf( i -> i.getValue().equals(delta.getResource()));
+			} else {
+				System.err.println("COULD NOT FIND PARENT");
+			}
 		}
 		return true;
 	}
