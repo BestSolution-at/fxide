@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_AScWkf_4EeakkKbUbj78cg" elementId="org.eclipse.e4.application" bindingContexts="_AScWkP_4EeakkKbUbj78cg">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_K8hOcAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.trimmedwindow.0">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_K8hOcAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.trimmedwindow.0" x="50" y="50" width="1280" height="1024">
     <children xsi:type="basic:PartSashContainer" xmi:id="_MOLDkAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.partsashcontainer.0" horizontal="true">
-      <children xsi:type="basic:Part" xmi:id="_NqepgAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.part.modules" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.parts.PackageExplorer" label="Modules" iconURI="platform:/plugin/at.bestsolution.fxide.jdt/css/che/modules.png">
+      <children xsi:type="basic:Part" xmi:id="_NqepgAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.part.modules" containerData="1" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.parts.PackageExplorer" label="Modules" iconURI="platform:/plugin/at.bestsolution.fxide.jdt/css/che/modules.png">
         <tags>showTopTrimArea</tags>
+        <tags>fx_no_auto_resize</tags>
         <handlers xmi:id="_NlBcMA54Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.handler.5" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.handlers.DeleteResourceHandler" command="_VW1dkA52Eee2Luf5eLZdWw"/>
       </children>
-      <children xsi:type="basic:PartStack" xmi:id="_UbY8oAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.partstack.0">
+      <children xsi:type="basic:PartStack" xmi:id="_UbY8oAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.partstack.0" containerData="3">
         <persistedState key="fx.stack.tabslocation" value="BOTTOM"/>
         <tags>editorContainer</tags>
         <tags>showTopTrimArea</tags>
