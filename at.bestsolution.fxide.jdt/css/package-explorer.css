@@ -1,29 +1,29 @@
-.tree-cell:filled.folder-default {
-	-fx-graphic: url("che/folder.png");
+.tree-cell:filled.folder-default ImageView {
+	-fx-image: url("che/folder.png");
 }
 
-.tree-cell:filled.folder-project {
-	-fx-graphic: url("che/project.png");
+.tree-cell:filled.folder-project ImageView {
+	-fx-image: url("che/project.png");
 }
 
-.tree-cell:filled.folder-package {
-	-fx-graphic: url("che/package.png");
+.tree-cell:filled.folder-package ImageView {
+	-fx-image: url("che/package.png");
 }
 
-.tree-cell:filled.folder-source {
-	-fx-graphic: url("che/source-folder.png");
+.tree-cell:filled.folder-source ImageView {
+	-fx-image: url("che/source-folder.png");
 }
 
-.tree-cell:filled.folder-test {
-	-fx-graphic: url("che/test-folder.png");
+.tree-cell:filled.folder-test ImageView {
+	-fx-image: url("che/test-folder.png");
 }
 
-.tree-cell:filled.file {
-	-fx-graphic: url("che/file.png");
+.tree-cell:filled.file ImageView {
+	-fx-image: url("che/file.png");
 }
 
-.tree-cell:filled.file.java {
-	-fx-graphic: url("che/java-class.png");
+.tree-cell:filled.file.java ImageView {
+	-fx-image: url("che/java-class.png");
 }
 
 .tree-cell:filled.hidden * {

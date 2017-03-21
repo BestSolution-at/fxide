@@ -54,6 +54,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
@@ -274,9 +275,11 @@ public class PackageExplorer {
 				if( ! currentStyleClass.isEmpty() ) {
 					getStyleClass().addAll(currentStyleClass);
 				}
+				ImageView view = new ImageView();
+				setGraphic(view);
 			} else {
 				setText(null);
-				applyCss();
+				setGraphic(null);
 			}
 		}
 	}
