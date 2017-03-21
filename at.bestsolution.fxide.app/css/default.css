@@ -1,0 +1,22 @@
+@IMPORT "base.css";
+
+.styled-text-area .list-view {
+	-fx-background-color: white;
+
+	-source-editor-code: rgb(0, 0, 0);
+	-source-editor-operator: rgb(0, 0, 0);
+	-source-editor-bracket: rgb(0, 0, 0);
+	-source-editor-keyword: #295F94;
+	-source-editor-string:  #317ECC;
+	-source-editor-number:  #6c83c4;
+	-source-editor-doc: #AD95AF;
+	-source-editor-api-doc:  rgb(171,85,0);
+	-source-editor-buitin-type: #74a567;
+	-source-editor-annotation: #808080;
+
+	-source-editor-markup-doc: rgb(63, 95, 191);
+	-source-editor-markup-property-name: rgb(0, 0, 128);
+	-source-editor-markup-property-value: #7f007f;
+	-source-editor-markup-tag: #3f7f80;
+	-source-editor-markup-extra: rgb(128, 128, 128);
+}

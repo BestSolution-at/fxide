@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_AScWkf_4EeakkKbUbj78cg" elementId="org.eclipse.e4.application" bindingContexts="_AScWkP_4EeakkKbUbj78cg">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_K8hOcAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.trimmedwindow.0">
+    <children xsi:type="basic:PartSashContainer" xmi:id="_MOLDkAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.partsashcontainer.0" horizontal="true">
+      <children xsi:type="basic:Part" xmi:id="_NqepgAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.part.modules" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.parts.PackageExplorer" label="Modules" iconURI="platform:/plugin/at.bestsolution.fxide.jdt/css/che/modules.png">
+        <tags>showTopTrimArea</tags>
+      </children>
+      <children xsi:type="basic:PartStack" xmi:id="_UbY8oAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.partstack.0">
+        <persistedState key="fx.stack.tabslocation" value="BOTTOM"/>
+        <tags>editorContainer</tags>
+        <tags>showTopTrimArea</tags>
+      </children>
+    </children>
+    <variables>packageexplorer.selection</variables>
+    <variables>activeInput</variables>
+    <mainMenu xmi:id="_Lqbn4AALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.menu.0">
+      <children xsi:type="menu:Menu" xmi:id="_MKscUAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.menu.file" label="File">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_N3GTwAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handledmenuitem.javaproject" label="Java Module ..." command="_d4AyoAALEeekkKbUbj78cg"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_SZbPcAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_S7HnQAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handledmenuitem.javapackage" label="Java Package ..." command="_gke_8AALEeekkKbUbj78cg"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_XcrG4AALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handledmenuitem.javatype" label="Java Type ..." command="_iVBJcAALEeekkKbUbj78cg"/>
+      </children>
+    </mainMenu>
+  </children>
+  <handlers xmi:id="_kwwMEAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handler.0" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.handlers.NewJavaModuleHandler" command="_d4AyoAALEeekkKbUbj78cg"/>
+  <handlers xmi:id="_nZdTsAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handler.1" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.handlers.NewPackageHandler" command="_gke_8AALEeekkKbUbj78cg"/>
+  <handlers xmi:id="_sKKpoAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handler.2" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.handlers.NewJavaTypeHandler" command="_iVBJcAALEeekkKbUbj78cg"/>
+  <handlers xmi:id="_Juy70AByEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handler.3" contributionURI="bundleclass://at.bestsolution.fxide.app/at.bestsolution.fxide.app.themes.ToggleTheme" command="_7AvzAABxEeekkKbUbj78cg"/>
+  <bindingTables xmi:id="_LkIFwAByEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.bindingtable.0" bindingContext="_AScWkP_4EeakkKbUbj78cg">
+    <bindings xmi:id="_NEdQEAByEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.keybinding.0" keySequence="M1+T" command="_7AvzAABxEeekkKbUbj78cg"/>
+  </bindingTables>
+  <rootContext xmi:id="_AScWkP_4EeakkKbUbj78cg" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="In Dialog and Windows">
+    <children xmi:id="_AScWkv_4EeakkKbUbj78cg" elementId="org.eclipse.ui.contexts.window" name="In Windows"/>
+    <children xmi:id="_AScWk__4EeakkKbUbj78cg" elementId="org.eclipse.ui.contexts.dialog" name="In Dialogs"/>
+  </rootContext>
+  <commands xmi:id="_d4AyoAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.command.newjavamodule" commandName="New Java Module"/>
+  <commands xmi:id="_gke_8AALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.command.newjavapackage" commandName="New Java Package"/>
+  <commands xmi:id="_iVBJcAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.command.newjavatype" commandName="New Java Type"/>
+  <commands xmi:id="_7AvzAABxEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.command.toggletheme" commandName="Toggle Theme"/>
+  <addons xmi:id="_AScWlP_4EeakkKbUbj78cg" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_AScWlf_4EeakkKbUbj78cg" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_AScWlv_4EeakkKbUbj78cg" elementId="org.eclipse.fx.ui.keybindings.e4.service" contributionURI="bundleclass://org.eclipse.fx.ui.keybindings.e4/org.eclipse.fx.ui.keybindings.e4.BindingServiceAddon"/>
+  <addons xmi:id="_AScWl__4EeakkKbUbj78cg" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_AScWmP_4EeakkKbUbj78cg" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_AScWmf_4EeakkKbUbj78cg" elementId="org.eclipse.fx.ui.keybindings.e4.model" contributionURI="bundleclass://org.eclipse.fx.ui.keybindings.e4/org.eclipse.fx.ui.keybindings.e4.BindingProcessingAddon"/>
+  <addons xmi:id="_AScWmv_4EeakkKbUbj78cg" elementId="org.eclipse.e4.ui.workbench.addons.HandlerProcessingAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+  <addons xmi:id="_kbosgABfEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.addon.0" contributionURI="bundleclass://at.bestsolution.fxide.app/at.bestsolution.fxide.app.FontLoader"/>
+</application:Application>

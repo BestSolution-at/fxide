@@ -1,0 +1,49 @@
+@IMPORT "base.css";
+
+.root {
+    -fx-base: #4d5052;
+    -fx-background: #4d5052;
+    -fx-control-inner-background: #4d5052;
+    -fx-text-base-color: #c7c7c7;
+}
+
+.source-viewer.styled-text-area .selection-marker {
+	-fx-background-color: #2b5696;
+}
+
+.styled-text-area .list-view {
+	-fx-background-color: #393939;
+}
+
+.styled-text-area .current-line {
+	-fx-background-color: #414141;
+}
+
+.styled-text-area .line-ruler-text {
+	-fx-text-fill: #c7c7c7;
+}
+
+.styled-text-area .text-caret {
+	-fx-fill: #c7c7c7;
+	-fx-stroke: #c7c7c7;
+}
+
+
+.styled-text-area .list-view {
+	-source-editor-code: #b8c4d1;
+	-source-editor-operator: #b8c4d1;
+	-source-editor-bracket: #b8c4d1;
+	-source-editor-keyword: #d78b40;
+	-source-editor-string:  #7c986c;
+	-source-editor-number:  #b6c8ad;
+	-source-editor-doc: #929292;
+	-source-editor-api-doc: #74a567;
+	-source-editor-buitin-type: rgb(255,235,121);
+	-source-editor-annotation: rgb(200, 200, 200);
+
+	-source-editor-markup-doc: #929292;
+	-source-editor-markup-property-name: #b8c4d1;
+	-source-editor-markup-property-value: #7c986c;
+	-source-editor-markup-tag: #e9c063;
+	-source-editor-markup-extra: rgb(190, 190, 190);
+}

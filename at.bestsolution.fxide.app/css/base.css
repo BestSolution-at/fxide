@@ -1,0 +1,9 @@
+.root {
+	-fx-font-family: "Source Sans Pro";
+	-fx-font-size: 14;
+}
+
+.styled-text-area {
+	-fx-font-family: "Source Code Pro";
+	-fx-font-size: 14;
+}

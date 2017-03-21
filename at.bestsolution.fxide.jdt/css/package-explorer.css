@@ -1,0 +1,36 @@
+.tree-cell:filled.folder-default {
+	-fx-graphic: url("che/folder.png");
+}
+
+.tree-cell:filled.folder-project {
+	-fx-graphic: url("che/project.png");
+}
+
+.tree-cell:filled.folder-package {
+	-fx-graphic: url("che/package.png");
+}
+
+.tree-cell:filled.folder-source {
+	-fx-graphic: url("che/source-folder.png");
+}
+
+.tree-cell:filled.folder-test {
+	-fx-graphic: url("che/test-folder.png");
+}
+
+.tree-cell:filled.file {
+	-fx-graphic: url("che/file.png");
+}
+
+.tree-cell:filled.file.java {
+	-fx-graphic: url("che/java-class.png");
+}
+
+.tree-cell:filled.hidden * {
+	-fx-opacity: 0.5;
+}
+
+.tree-cell:selected {
+	-fx-background: rgba(230,230,230,0.4);
+}
+
