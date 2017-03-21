@@ -85,7 +85,7 @@ public class JDTSourceFileInput implements SourceFileInput, IProblemRequestor {
 	public final void dispose() {
 		map = null;
 
-		if( compilationUnit != null ) {
+		if( compilationUnit != null && compilationUnit.getResource().exists() ) {
 			ExExecutor.executeRunnable(compilationUnit::restore);
 			ExExecutor.executeRunnable(compilationUnit::discardWorkingCopy);
 		}
