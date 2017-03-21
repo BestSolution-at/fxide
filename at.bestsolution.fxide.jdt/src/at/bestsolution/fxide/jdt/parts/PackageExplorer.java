@@ -276,6 +276,7 @@ public class PackageExplorer {
 				}
 			} else {
 				setText(null);
+				applyCss();
 			}
 		}
 	}
