@@ -42,9 +42,9 @@ import org.eclipse.jdt.launching.JavaRuntime;
 import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 @SuppressWarnings("restriction")
 public class NewJavaModuleHandler {
@@ -61,39 +61,25 @@ public class NewJavaModuleHandler {
 		@Inject
 		public NewPojectDialog(IWorkspace workspace) {
 			super("New Java Module", "New Java Module", "Create a new Java module");
+			getStyleClass().add("jdt-new-module-dialog");
 			this.workspace = workspace;
 			setClientArea(createClientArea());
-			setMinWidth(300);
+			setMinWidth(500);
 			addDefaultButtons();
 		}
 
 		private Node createClientArea() {
-			VBox pane = new VBox(10);
+			HBox box = new HBox(25);
 
-			{
-				VBox box = new VBox(2);
-				Label l = new Label();
-				l.setText("Name");
+			ChoiceBox<String> f = new ChoiceBox<>();
+			f.setItems(FXCollections.observableArrayList("Maven","Gradle"));
+			f.getSelectionModel().select(0);
 
-				projectName = new TextField();
-				box.getChildren().addAll(l,projectName);
-				pane.getChildren().add(box);
-			}
+			projectName = new TextField();
+			HBox.setHgrow(projectName, Priority.ALWAYS);
+			box.getChildren().addAll(f,projectName);
 
-			{
-				VBox box = new VBox(2);
-				Label l = new Label();
-				l.setText("Build");
-
-				ChoiceBox<String> f = new ChoiceBox<>();
-				f.setItems(FXCollections.observableArrayList("Maven","Gradle"));
-				f.getSelectionModel().select(0);
-
-				box.getChildren().addAll(l,f);
-				pane.getChildren().add(box);
-			}
-
-			return pane;
+			return box;
 		}
 
 		@Override
