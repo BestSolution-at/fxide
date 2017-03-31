@@ -34,3 +34,15 @@
 	-fx-background: rgba(230,230,230,0.4);
 }
 
+
+.jdt-new-module-dialog .efx-dialog-title-image {
+	-fx-image: url("che/project_wizban.png");
+}
+
+.jdt-new-type-dialog .efx-dialog-title-image {
+	-fx-image: url("che/java-class_wizban.png");
+}
+
+.modal-dialog .dialog-content {
+	-fx-padding: 15;
+}

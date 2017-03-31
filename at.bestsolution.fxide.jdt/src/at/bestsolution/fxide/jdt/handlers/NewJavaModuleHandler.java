@@ -19,120 +19,104 @@
  */
 package at.bestsolution.fxide.jdt.handlers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.fx.ui.controls.dialog.TitleAreaDialog;
+import org.eclipse.fx.core.Status;
+import org.eclipse.fx.core.di.Service;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService.ModalityScope;
-import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.launching.JavaRuntime;
 
+import at.bestsolution.controls.patternfly.PatternFly;
+import at.bestsolution.fxide.jdt.component.LWModalDialog;
+import at.bestsolution.fxide.jdt.services.ModuleTypeService;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.util.StringConverter;
 
-@SuppressWarnings("restriction")
 public class NewJavaModuleHandler {
 
 	@Execute
 	public void createJavaModule(LightWeightDialogService dialogService) {
-		dialogService.openDialog(NewPojectDialog.class, ModalityScope.WINDOW);
+		dialogService.openDialog(NewProjectDialog.class, ModalityScope.WINDOW);
 	}
 
-	static class NewPojectDialog extends TitleAreaDialog {
+	static class NewProjectDialog extends LWModalDialog {
 		private final IWorkspace workspace;
 		private TextField projectName;
+		private final List<ModuleTypeService> moduleTypes;
+		private ChoiceBox<ModuleTypeService> moduleType;
 
 		@Inject
-		public NewPojectDialog(IWorkspace workspace) {
-			super("New Java Module", "New Java Module", "Create a new Java module");
-			getStyleClass().add("jdt-new-module-dialog");
+		public NewProjectDialog(IWorkspace workspace, @Service List<ModuleTypeService> moduleTypes) {
 			this.workspace = workspace;
-			setClientArea(createClientArea());
+			this.moduleTypes = moduleTypes;
+			setTitle("New Java Module");
 			setMinWidth(500);
-			addDefaultButtons();
+			setMaxWidth(500);
+			setClientArea(createClientArea());
+
+			Button cancel = PatternFly.defaultButton(new Button("Cancel"));
+			cancel.setOnAction( evt -> close());
+
+			Button ok = PatternFly.primaryButton(new Button("Ok"));
+			ok.setOnAction( this::okPressed );
+
+			getButtons().addAll(cancel,ok);
 		}
 
 		private Node createClientArea() {
-			HBox box = new HBox(25);
+			HBox box = new HBox(10);
+			box.getStyleClass().add("dialog-content");
 
-			ChoiceBox<String> f = new ChoiceBox<>();
-			f.setItems(FXCollections.observableArrayList("Maven","Gradle"));
-			f.getSelectionModel().select(0);
+			moduleType = PatternFly.defaultChoiceBox(new ChoiceBox<>());
+			moduleType.setConverter( new StringConverter<ModuleTypeService>() {
 
-			projectName = new TextField();
+				@Override
+				public String toString(ModuleTypeService object) {
+					return object.getLabel();
+				}
+
+				@Override
+				public ModuleTypeService fromString(String string) {
+					return null;
+				}
+			});
+			moduleType.setItems(FXCollections.observableArrayList(moduleTypes));
+			moduleType.getSelectionModel().select(0);
+
+			projectName = PatternFly.defaultTextField(new TextField());
 			HBox.setHgrow(projectName, Priority.ALWAYS);
-			box.getChildren().addAll(f,projectName);
+			box.getChildren().addAll(moduleType,projectName);
 
 			return box;
 		}
 
-		@Override
-		protected void handleOk() {
-			IProjectDescription description = workspace.newProjectDescription(projectName.getText());
-			description.setNatureIds( new String[] {
-				JavaCore.NATURE_ID
-			});
-			ICommand cmd = description.newCommand();
-			cmd.setBuilderName(JavaCore.BUILDER_ID);
-			description.setBuildSpec(new ICommand[] { cmd });
+		private void okPressed(ActionEvent e) {
+			if( projectName.getText() == null || projectName.getText().isEmpty() ) {
+				//TODO Show error
+				return;
+			}
 
 			IProject project = workspace.getRoot().getProject(projectName.getText());
-			try {
-				project.create(description, null);
-				project.open(null);
+			ModuleTypeService moduleTypeService = moduleType.getSelectionModel().getSelectedItem();
+			Status status = moduleTypeService.createModule(project);
 
-				project.getFolder(new Path("target")).create(true, true, null);
-				project.getFolder(new Path("target").append("classes")).create(true, true, null);
-
-				project.getFolder(new Path("target")).setDerived(true,null);
-				project.getFolder(new Path("target").append("classes")).setDerived(true,null);
-
-				project.getFolder(new Path("src")).create(true, true, null);
-
-				project.getFolder(new Path("src").append("main")).create(true, true, null);
-				project.getFolder(new Path("src").append("main").append("java")).create(true, true, null);
-				project.getFolder(new Path("src").append("main").append("resources")).create(true, true, null);
-
-				project.getFolder(new Path("src").append("test")).create(true, true, null);
-				project.getFolder(new Path("src").append("test").append("java")).create(true, true, null);
-				project.getFolder(new Path("src").append("test").append("resources")).create(true, true, null);
-
-//				IExecutionEnvironmentsManager executionEnvironmentsManager = JavaRuntime.getExecutionEnvironmentsManager();
-//				IExecutionEnvironment[] executionEnvironments = executionEnvironmentsManager.getExecutionEnvironments();
-//				System.err.println(JavaRuntime.getDefaultVMInstall().getInstallLocation());
-
-				IJavaProject jProject = JavaCore.create(project);
-				jProject.setOutputLocation(project.getFolder(new Path("target").append("classes")).getFullPath(), null);
-
-				List<IClasspathEntry> entries = new ArrayList<>();
-				entries.add(JavaCore.newSourceEntry(project.getProject().getFullPath().append("src").append("main").append("java")));
-				entries.add(JavaCore.newSourceEntry(project.getProject().getFullPath().append("src").append("main").append("resources")));
-				entries.add(JavaCore.newSourceEntry(project.getProject().getFullPath().append("src").append("test").append("java")));
-				entries.add(JavaCore.newSourceEntry(project.getProject().getFullPath().append("src").append("test").append("resources")));
-				entries.add(JavaCore.newContainerEntry(JavaRuntime.newDefaultJREContainerPath()));
-
-				jProject.setRawClasspath(entries.toArray(new IClasspathEntry[0]), null);
-				workspace.save(true, null);
-				super.handleOk();
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if( status.isOk() ) {
+				close();
+			} else {
+				//TODO Show error
+				return;
 			}
 		}
 	}
