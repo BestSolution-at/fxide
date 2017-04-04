@@ -23,13 +23,9 @@ import org.eclipse.fx.code.editor.Input;
 import org.eclipse.fx.code.editor.services.InputTypeProvider;
 import org.osgi.service.component.annotations.Component;
 
-@Component(property="service.ranking:Integer=1")
+@Component(property="service.ranking:Integer=10")
 @SuppressWarnings("restriction")
 public class JDTSourceFileInputTypeProvider implements InputTypeProvider {
-
-	public JDTSourceFileInputTypeProvider() {
-		System.err.println("CREATED!!!!!");
-	}
 
 	@Override
 	public Class<? extends Input<?>> getType(String s) {
@@ -38,7 +34,6 @@ public class JDTSourceFileInputTypeProvider implements InputTypeProvider {
 
 	@Override
 	public boolean test(String t) {
-		System.err.println("TESTING: " +t);
 		if( t.endsWith(".java") ) {
 			if( t.startsWith("module-file:") ) {
 				return true;
