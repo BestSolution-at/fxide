@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Demo
+Bundle-SymbolicName: at.bestsolution.controls.demo
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: at.bestsolution.controls.patternfly,
+ org.eclipse.fx.ui.controls.stage;version="3.0.0"
+Require-Bundle: org.eclipse.fx.core;bundle-version="3.0.0"
