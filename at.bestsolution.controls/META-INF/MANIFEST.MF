@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Controls
+Bundle-SymbolicName: at.bestsolution.controls
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: at.bestsolution.controls.patternfly
+Import-Package: org.eclipse.fx.ui.controls;version="3.0.0",
+ org.eclipse.fx.ui.controls.image;version="3.0.0",
+ org.eclipse.fx.ui.controls.stage;version="3.0.0"

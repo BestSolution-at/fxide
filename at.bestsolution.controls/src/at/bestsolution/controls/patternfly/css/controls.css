@@ -1,0 +1,34 @@
+@IMPORT "modal-dialog.css";
+
+.text-field.tf-default {
+	-fx-border-color: pf-text-field-border;
+	-fx-background-color: pf-text-field-background;
+}
+
+.label.lb-default {
+	-fx-font-weight: bold;
+}
+
+.button.btn-default {
+	-fx-background-color: pf-button-default-background;
+	-fx-border-color: pf-button-default-border;
+	-fx-text-fill: pf-button-default-text;
+	-fx-font-weight: bold;
+}
+
+.button.btn-primary {
+	-fx-background-color: pf-button-primary-background;
+	-fx-border-color: pf-button-primary-border;
+	-fx-text-fill: pf-button-primary-text;
+	-fx-font-weight: bold;
+}
+
+.choice-box.cb-default {
+	-fx-background-color: pf-choice-box-default-background;
+	-fx-border-color: pf-choice-box-default-border;
+}
+
+.choice-box.cb-default > .label {
+	-fx-text-fill: pf-choice-box-default-text;
+	-fx-font-weight: bold;
+}
