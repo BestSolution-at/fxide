@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Maven
+Bundle-SymbolicName: at.bestsolution.fxide.jdt.maven
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: at.bestsolution.fxide.jdt.services,
+ org.eclipse.fx.core;version="3.0.0",
+ org.osgi.service.component.annotations;version="1.2.0"
+Require-Bundle: org.eclipse.core.resources
+Bundle-ActivationPolicy: lazy
+Service-Component: OSGI-INF/at.bestsolution.fxide.jdt.maven.MavenModuleTypeService.xml
