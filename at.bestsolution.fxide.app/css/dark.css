@@ -1,4 +1,5 @@
 @IMPORT "base.css";
+@IMPORT "platform:/plugin/at.bestsolution.controls/at/bestsolution/controls/patternfly/css/dark-colors.css";
 
 .root {
     -fx-base: #4d5052;

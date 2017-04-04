@@ -45,6 +45,7 @@
     <bindings xmi:id="_4Kv2gA54Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.keybinding.4" keySequence="M1+X" command="_DF_G8A53Eee2Luf5eLZdWw"/>
     <bindings xmi:id="_7R0VIA54Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.keybinding.5" keySequence="M1+C" command="_BybNUA53Eee2Luf5eLZdWw"/>
     <bindings xmi:id="_9NILQA54Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.keybinding.6" keySequence="M1+V" command="_EziN4A53Eee2Luf5eLZdWw"/>
+    <bindings xmi:id="_CbFXMA_UEee_TeydEEJ3bg" elementId="at.bestsolution.fxide.app.keybinding.7" keySequence="M1+N" command="_iVBJcAALEeekkKbUbj78cg"/>
   </bindingTables>
   <rootContext xmi:id="_AScWkP_4EeakkKbUbj78cg" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="In Dialog and Windows">
     <children xmi:id="_AScWkv_4EeakkKbUbj78cg" elementId="org.eclipse.ui.contexts.window" name="In Windows"/>
