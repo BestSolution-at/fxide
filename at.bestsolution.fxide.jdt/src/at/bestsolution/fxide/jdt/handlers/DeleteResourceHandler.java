@@ -25,15 +25,12 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.fx.ui.controls.dialog.MessageDialog.QuestionDialog;
-import org.eclipse.fx.ui.controls.dialog.MessageDialog.QuestionResult;
-import org.eclipse.fx.ui.controls.stage.FrameEvent;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService.ModalityScope;
 
 import at.bestsolution.fxide.jdt.JDTConstants;
+import at.bestsolution.fxide.jdt.component.LWModalDialog.LWQuestionDialog;
 
-@SuppressWarnings("restriction")
 public class DeleteResourceHandler {
 	@CanExecute
 	public boolean canDelete(@Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
@@ -43,9 +40,8 @@ public class DeleteResourceHandler {
 	@Execute
 	public void deleteResource(LightWeightDialogService dialogService,
 			@Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
-		QuestionDialog dialog = new QuestionDialog("Delete", "Delete file " + resource.getName() + "?");
-		dialog.addEventHandler(FrameEvent.CLOSED, evt -> {
-			if (dialog.getResult() == QuestionResult.YES) {
+		LWQuestionDialog d = new LWQuestionDialog("Delete", "Are you sure you want to delete file " + resource.getName() + "?", b -> {
+			if( b ) {
 				try {
 					resource.delete(true, null);
 				} catch (CoreException e) {
@@ -54,7 +50,7 @@ public class DeleteResourceHandler {
 				}
 			}
 		});
-		dialogService.openDialog(dialog, ModalityScope.WINDOW);
+		d.setMinWidth(400);
+		dialogService.openDialog(d, ModalityScope.WINDOW);
 	}
-
 }
