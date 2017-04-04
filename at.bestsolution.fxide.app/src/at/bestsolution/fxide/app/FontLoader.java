@@ -26,19 +26,24 @@ import javafx.scene.text.Font;
 public class FontLoader {
 	@PostConstruct
 	void init() {
-		System.err.println(Font.loadFont(getClass().getResourceAsStream("fonts/Hack-Bold.ttf"), 12).getFamily());
-		Font.loadFont(getClass().getResourceAsStream("fonts/Hack-BoldItalic.ttf"), 12);
-		Font.loadFont(getClass().getResourceAsStream("fonts/Hack-Italic.ttf"), 12);
-		Font.loadFont(getClass().getResourceAsStream("fonts/Hack-Regular.ttf"), 12);
+		Font.loadFont(getClass().getResource("fonts/Hack-Bold.ttf").toExternalForm(), 12);
+		Font.loadFont(getClass().getResource("fonts/Hack-BoldItalic.ttf").toExternalForm(), 12);
+		Font.loadFont(getClass().getResource("fonts/Hack-Italic.ttf").toExternalForm(), 12);
+		Font.loadFont(getClass().getResource("fonts/Hack-Regular.ttf").toExternalForm(), 12);
 
-		System.err.println(Font.loadFont(getClass().getResourceAsStream("fonts/SourceCodePro-Bold.ttf"), 12).getFamily());
-		Font.loadFont(getClass().getResourceAsStream("fonts/SourceCodePro-BoldIt.ttf"), 12);
-		Font.loadFont(getClass().getResourceAsStream("fonts/SourceCodePro-It.ttf"), 12);
-		Font.loadFont(getClass().getResourceAsStream("fonts/SourceCodePro-Regular.ttf"), 12);
+		Font.loadFont(getClass().getResource("fonts/SourceCodePro-Bold.ttf").toExternalForm(), 12);
+		Font.loadFont(getClass().getResource("fonts/SourceCodePro-BoldIt.ttf").toExternalForm(), 12);
+		Font.loadFont(getClass().getResource("fonts/SourceCodePro-It.ttf").toExternalForm(), 12);
+		Font.loadFont(getClass().getResource("fonts/SourceCodePro-Regular.ttf").toExternalForm(), 12);
 
-		Font.loadFont(getClass().getResourceAsStream("fonts/SourceSansPro-Bold.ttf"), 12);
-		Font.loadFont(getClass().getResourceAsStream("fonts/SourceSansPro-BoldIt.ttf"), 12);
-		Font.loadFont(getClass().getResourceAsStream("fonts/SourceSansPro-It.ttf"), 12);
-		Font.loadFont(getClass().getResourceAsStream("fonts/SourceSansPro-Regular.ttf"), 12).getFamily();
+		Font.loadFont(getClass().getResource("fonts/SourceSansPro-Bold.ttf").toExternalForm(), 12);
+		Font.loadFont(getClass().getResource("fonts/SourceSansPro-BoldIt.ttf").toExternalForm(), 12);
+		Font.loadFont(getClass().getResource("fonts/SourceSansPro-It.ttf").toExternalForm(), 12);
+		Font.loadFont(getClass().getResource("fonts/SourceSansPro-Regular.ttf").toExternalForm(), 12);
+
+		Font.loadFont(getClass().getResource("fonts/OpenSans-Bold.ttf").toExternalForm(), 12);
+		Font.loadFont(getClass().getResource("fonts/OpenSans-BoldItalic.ttf").toExternalForm(), 12);
+		Font.loadFont(getClass().getResource("fonts/OpenSans-Italic.ttf").toExternalForm(), 12);
+		Font.loadFont(getClass().getResource("fonts/OpenSans-Regular.ttf").toExternalForm(), 12);
 	}
 }
