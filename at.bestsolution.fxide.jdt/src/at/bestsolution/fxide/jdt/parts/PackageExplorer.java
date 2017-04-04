@@ -119,7 +119,9 @@ public class PackageExplorer {
 	private void handleResourceChanged(IResourceChangeEvent event) {
 		Runnable code = () -> {
 			try {
-				event.getDelta().accept(this::visitDelta);
+				if( event.getDelta() != null ) {
+					event.getDelta().accept(this::visitDelta);
+				}
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -135,6 +137,10 @@ public class PackageExplorer {
 
 	public boolean visitDelta(IResourceDelta delta) throws CoreException {
 		if( delta.getKind() == IResourceDelta.ADDED ) {
+			if( delta.getResource() instanceof IProject ) {
+				viewer.getRoot().getChildren().add(new ContainerItem(ContainerType.PROJECT, (IContainer) delta.getResource()));
+				return true;
+			}
 			Optional<TreeItem<IResource>> opItem = getParentItem(delta.getResource());
 
 			if( ! opItem.isPresent() ) {
@@ -167,12 +173,14 @@ public class PackageExplorer {
 				}
 			}
 		} else if( delta.getKind() == IResourceDelta.REMOVED ) {
+			if( delta.getResource() instanceof IProject ) {
+				viewer.getRoot().getChildren().removeIf( i -> delta.getResource().equals(i.getValue()) );
+				return true;
+			}
 			Optional<TreeItem<IResource>> opItem = getParentItem(delta.getResource());
 
 			if( opItem.isPresent() ) {
 				opItem.get().getChildren().removeIf( i -> i.getValue().equals(delta.getResource()));
-			} else {
-				System.err.println("COULD NOT FIND PARENT");
 			}
 		}
 		return true;
