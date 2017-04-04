@@ -52,7 +52,9 @@ public class WorkspaceTrackerAddon {
 	private void handleResourceChanged(IResourceChangeEvent event) {
 		Runnable code = () -> {
 			try {
-				event.getDelta().accept(this::visitDelta);
+				if( event.getDelta() != null ) {
+					event.getDelta().accept(this::visitDelta);
+				}
 			} catch (CoreException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
