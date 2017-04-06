@@ -22,7 +22,6 @@ package at.bestsolution.fxide.jdt.handlers;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.core.resources.IContainer;
@@ -41,7 +40,6 @@ import org.eclipse.jdt.core.JavaCore;
 import at.bestsolution.controls.patternfly.PatternFly;
 import at.bestsolution.fxide.jdt.JDTConstants;
 import at.bestsolution.fxide.jdt.component.LWModalDialog;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -89,7 +87,6 @@ public class NewJavaTypeHandler {
 		private TextField name;
 		private ChoiceBox<String> type;
 
-		@Inject
 		public NewTypeDialog(IPackageFragment packageFragment) {
 			setTitle("New Java Type");
 			getStyleClass().add("jdt-new-type-dialog");
@@ -109,11 +106,8 @@ public class NewJavaTypeHandler {
 		}
 
 		@Override
-		protected void opened() {
-			super.opened();
-			Platform.runLater( () -> {
-				name.requestFocus();
-			});
+		protected void setInitialFocus() {
+			name.requestFocus();
 		}
 
 		private Node createClientArea() {
