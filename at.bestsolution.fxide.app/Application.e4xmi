@@ -21,6 +21,8 @@
         <children xsi:type="menu:MenuSeparator" xmi:id="_SZbPcAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.menuseparator.0"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_S7HnQAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handledmenuitem.javapackage" label="Java Package ..." command="_gke_8AALEeekkKbUbj78cg"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_XcrG4AALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handledmenuitem.javatype" label="Java Type ..." command="_iVBJcAALEeekkKbUbj78cg"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_DHo9EBsKEeeVNr_f-Uafhg" elementId="at.bestsolution.fxide.app.menuseparator.2"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_D72BMBsKEeeVNr_f-Uafhg" elementId="at.bestsolution.fxide.app.handledmenuitem.save" label="Save" command="_Hm4IgBsKEeeVNr_f-Uafhg"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_xygM8A52Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.menu.edit" label="Edit">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_9X1RUA52Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.handledmenuitem.undo" label="Undo" command="_0sxlsA52Eee2Luf5eLZdWw"/>
@@ -37,6 +39,7 @@
   <handlers xmi:id="_nZdTsAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handler.1" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.handlers.NewPackageHandler" command="_gke_8AALEeekkKbUbj78cg"/>
   <handlers xmi:id="_sKKpoAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handler.2" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.handlers.NewJavaTypeHandler" command="_iVBJcAALEeekkKbUbj78cg"/>
   <handlers xmi:id="_Juy70AByEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handler.3" contributionURI="bundleclass://at.bestsolution.fxide.app/at.bestsolution.fxide.app.themes.ToggleTheme" command="_7AvzAABxEeekkKbUbj78cg"/>
+  <handlers xmi:id="_FvkBkBsKEeeVNr_f-Uafhg" elementId="at.bestsolution.fxide.app.handler.4" contributionURI="bundleclass://at.bestsolution.fxide.app/at.bestsolution.fxide.app.SaveHandler" command="_Hm4IgBsKEeeVNr_f-Uafhg"/>
   <bindingTables xmi:id="_LkIFwAByEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.bindingtable.0" bindingContext="_AScWkP_4EeakkKbUbj78cg">
     <bindings xmi:id="_NEdQEAByEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.keybinding.0" keySequence="M1+T" command="_7AvzAABxEeekkKbUbj78cg"/>
     <bindings xmi:id="_VwuSUA54Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.keybinding.1" keySequence="DEL" command="_VW1dkA52Eee2Luf5eLZdWw"/>
@@ -46,6 +49,7 @@
     <bindings xmi:id="_7R0VIA54Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.keybinding.5" keySequence="M1+C" command="_BybNUA53Eee2Luf5eLZdWw"/>
     <bindings xmi:id="_9NILQA54Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.keybinding.6" keySequence="M1+V" command="_EziN4A53Eee2Luf5eLZdWw"/>
     <bindings xmi:id="_CbFXMA_UEee_TeydEEJ3bg" elementId="at.bestsolution.fxide.app.keybinding.7" keySequence="M1+N" command="_iVBJcAALEeekkKbUbj78cg"/>
+    <bindings xmi:id="_PP1d8BsKEeeVNr_f-Uafhg" elementId="at.bestsolution.fxide.app.keybinding.8" keySequence="M1+S" command="_Hm4IgBsKEeeVNr_f-Uafhg"/>
   </bindingTables>
   <rootContext xmi:id="_AScWkP_4EeakkKbUbj78cg" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="In Dialog and Windows">
     <children xmi:id="_AScWkv_4EeakkKbUbj78cg" elementId="org.eclipse.ui.contexts.window" name="In Windows"/>
@@ -61,6 +65,7 @@
   <commands xmi:id="_BybNUA53Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.command.copy" commandName="Copy"/>
   <commands xmi:id="_DF_G8A53Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.command.cut" commandName="Cut"/>
   <commands xmi:id="_EziN4A53Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.command.paste" commandName="Paste"/>
+  <commands xmi:id="_Hm4IgBsKEeeVNr_f-Uafhg" elementId="at.bestsolution.fxide.app.command.save" commandName="Save"/>
   <addons xmi:id="_AScWlP_4EeakkKbUbj78cg" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_AScWlf_4EeakkKbUbj78cg" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_AScWlv_4EeakkKbUbj78cg" elementId="org.eclipse.fx.ui.keybindings.e4.service" contributionURI="bundleclass://org.eclipse.fx.ui.keybindings.e4/org.eclipse.fx.ui.keybindings.e4.BindingServiceAddon"/>
@@ -70,4 +75,5 @@
   <addons xmi:id="_AScWmv_4EeakkKbUbj78cg" elementId="org.eclipse.e4.ui.workbench.addons.HandlerProcessingAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
   <addons xmi:id="_kbosgABfEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.addon.0" contributionURI="bundleclass://at.bestsolution.fxide.app/at.bestsolution.fxide.app.FontLoader"/>
   <addons xmi:id="_ue70UA5_Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.addon.1" contributionURI="bundleclass://at.bestsolution.fxide.app/at.bestsolution.fxide.app.WorkspaceTrackerAddon"/>
+  <addons xmi:id="_q7oW8BsHEeeVNr_f-Uafhg" elementId="at.bestsolution.fxide.app.addon.2" contributionURI="bundleclass://at.bestsolution.fxide.app/at.bestsolution.fxide.app.DirtyTrackerAddon"/>
 </application:Application>

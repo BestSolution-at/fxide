@@ -26,12 +26,16 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.fx.code.editor.Constants;
 import org.eclipse.fx.core.ThreadSynchronize;
+import org.osgi.service.prefs.BackingStoreException;
 
 @SuppressWarnings("restriction")
 public class WorkspaceTrackerAddon {
@@ -46,6 +50,17 @@ public class WorkspaceTrackerAddon {
 		this.workspace = workspace;
 		this.application = application;
 		this.modelService = modelService;
+
+		IEclipsePreferences node = InstanceScope.INSTANCE.getNode(ResourcesPlugin.PI_RESOURCES);
+		if( node.get(ResourcesPlugin.PREF_ENCODING, "").equals("UTF-8") ) {
+			node.put(ResourcesPlugin.PREF_ENCODING, "UTF-8");
+			try {
+				node.flush();
+			} catch (BackingStoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		workspace.addResourceChangeListener(this::handleResourceChanged);
 	}
 
