@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.fx.code.editor.Constants;
+import org.eclipse.fx.code.editor.SourceFileChange;
 import org.eclipse.fx.code.editor.SourceFileInput;
 import org.eclipse.fx.core.IOUtils;
 import org.eclipse.fx.core.event.EventBus;
@@ -30,10 +31,12 @@ public class EFSSourceFileInput implements SourceFileInput {
 	private IFile file;
 	private Map<String, Object> map;
 	private final String url;
+	private final EventBus eventBus;
 
 	@Inject
 	public EFSSourceFileInput(IWorkspace workspace, @Named(Constants.DOCUMENT_URL) String url, @Optional EventBus eventBus) {
 		this.url = url;
+		this.eventBus = eventBus;
 		String path = url.substring("module-file:".length());
 		String project = path.substring(0,path.indexOf('/'));
 		map = new HashMap<>();
@@ -51,12 +54,21 @@ public class EFSSourceFileInput implements SourceFileInput {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		if( eventBus != null ) {
+			SourceFileChange sourceChange = new SourceFileChange(this, offset, length, replacement);
+			eventBus.publish(Constants.TOPIC_SOURCE_FILE_INPUT_MODIFIED, sourceChange, true);
+		}
 	}
 
 	@Override
 	public void dispose() {
 		document = null;
 		map.clear();
+
+		if( eventBus != null ) {
+			eventBus.publish(Constants.TOPIC_SOURCE_FILE_INPUT_DISPOSED, this, true);
+		}
 	}
 
 	@Override
@@ -73,6 +85,9 @@ public class EFSSourceFileInput implements SourceFileInput {
 	public void persist() {
 		try(ByteArrayInputStream in = new ByteArrayInputStream(document.get().getBytes(file.getCharset()))) {
 			file.setContents(in, true, true, null);
+			if( eventBus != null ) {
+				eventBus.publish(Constants.TOPIC_SOURCE_FILE_INPUT_SAVED, this, true);
+			}
 		} catch (IOException | CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
