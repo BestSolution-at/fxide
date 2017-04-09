@@ -164,4 +164,46 @@ public class ModalDialog extends StackPane {
 			addEventHandler(ModalDialogEvent.CLOSED, evt -> resultConsumer.accept(result));
 		}
 	}
+
+	public enum YesNoCancel {
+		YES,
+		NO,
+		CANCEL
+	}
+
+	public static class YesNoCancelQuestionDialog extends ModalDialog {
+		private YesNoCancel result = YesNoCancel.CANCEL;
+
+		public YesNoCancelQuestionDialog(String title, String question, Consumer<YesNoCancel> resultConsumer) {
+			getStyleClass().add("question");
+			setTitle(title);
+			setClientArea(new Label(question, new GraphicNode()));
+
+			Button yesButton = PatternFly.primaryButton(new Button("Yes"));
+			yesButton.setDefaultButton(true);
+			yesButton.setOnAction( e -> {
+				result = YesNoCancel.YES;
+				close();
+				result = YesNoCancel.CANCEL;
+			});
+
+			Button noButton = PatternFly.defaultButton(new Button("No"));
+			noButton.setOnAction( e -> {
+				result = YesNoCancel.NO;
+				close();
+				result = YesNoCancel.CANCEL;
+			} );
+
+			Button cancelButton = PatternFly.defaultButton(new Button("Cancel"));
+			cancelButton.setCancelButton(true);
+			cancelButton.setOnAction( e -> {
+				result = YesNoCancel.CANCEL;
+				close();
+				result = YesNoCancel.CANCEL;
+			});
+
+			getButtons().addAll(yesButton,noButton,cancelButton);
+			addEventHandler(ModalDialogEvent.CLOSED, evt -> resultConsumer.accept(result));
+		}
+	}
 }
