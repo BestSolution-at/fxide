@@ -32,4 +32,5 @@ Service-Component: OSGI-INF/at.bestsolution.fxide.jdt.editor.JDTSourceFileInputT
  OSGI-INF/at.bestsolution.fxide.jdt.services.JDTModuleTypeService.xml,
  OSGI-INF/at.bestsolution.fxide.jdt.editor.EFSSourceFileInputTypeProvider.xml
 Bundle-ActivationPolicy: lazy
-Export-Package: at.bestsolution.fxide.jdt.services
+Export-Package: at.bestsolution.fxide.jdt.component,
+ at.bestsolution.fxide.jdt.services

@@ -69,6 +69,27 @@ public class LWModalDialog extends ModalDialog implements Frame {
 		@Override
 		public void setMaximizable(boolean maximizable) {
 		}
+	}
 
+	public static class LWYesNoCancelQuestionDialog extends YesNoCancelQuestionDialog implements Frame {
+
+		public LWYesNoCancelQuestionDialog(String title, String question, Consumer<YesNoCancel> resultConsumer) {
+			super(title, question, resultConsumer);
+			addEventHandler(ModalDialogEvent.CLOSED, e -> {
+				Event.fireEvent(this, new FrameEvent(this, FrameEvent.CLOSED));
+			});
+		}
+
+		@Override
+		public void setResizeable(boolean resizable) {
+		}
+
+		@Override
+		public void setMinimizable(boolean minimizable) {
+		}
+
+		@Override
+		public void setMaximizable(boolean maximizable) {
+		}
 	}
 }
