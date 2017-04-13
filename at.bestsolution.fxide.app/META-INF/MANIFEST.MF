@@ -40,4 +40,5 @@ Service-Component: OSGI-INF/at.bestsolution.fxide.app.themes.DefaultTheme.xml,
  OSGI-INF/at.bestsolution.fxide.app.themes.DarkTheme.xml,
  OSGI-INF/at.bestsolution.fxide.app.DefFadeDialogTranstionService.xml,
  OSGI-INF/at.bestsolution.fxide.app.themes.PatternflyStylesheet.xml,
- OSGI-INF/at.bestsolution.fxide.app.PatternflySaveDialogPresenterTypeProvider.xml
+ OSGI-INF/at.bestsolution.fxide.app.PatternflySaveDialogPresenterTypeProvider.xml,
+ OSGI-INF/at.bestsolution.fxide.app.DirtyWindowCloseHandler.xml
