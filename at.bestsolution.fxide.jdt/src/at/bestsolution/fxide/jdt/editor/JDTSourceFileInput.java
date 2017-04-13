@@ -95,6 +95,10 @@ public class JDTSourceFileInput implements SourceFileInput, IProblemRequestor {
 		}
 	}
 
+	public ICompilationUnit getCompilationUnit() {
+		return compilationUnit;
+	}
+
 	@Override
 	public void updateData(int offset, int length, String replacement) {
 		ExExecutor.executeRunnable(() -> compilationUnit.getBuffer().replace(offset, length, replacement),"Updateing buffer failed");
