@@ -39,5 +39,7 @@
 	pf-choice-box-default-border: pf-black-400;
 	pf-choice-box-default-text: pf-black-100;
 
+	pf-list-row-background: pf-black-800;
+
 	-fx-font-family: "Open Sans";
 }
