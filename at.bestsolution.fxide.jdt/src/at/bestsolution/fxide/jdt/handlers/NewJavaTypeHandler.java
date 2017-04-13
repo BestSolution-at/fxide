@@ -37,9 +37,9 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaCore;
 
+import at.bestsolution.controls.patternfly.ModalDialog;
 import at.bestsolution.controls.patternfly.PatternFly;
 import at.bestsolution.fxide.jdt.JDTConstants;
-import at.bestsolution.fxide.jdt.component.LWModalDialog;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -83,7 +83,7 @@ public class NewJavaTypeHandler {
 		}
 	}
 
-	static class NewTypeDialog extends LWModalDialog {
+	static class NewTypeDialog extends ModalDialog {
 		private final IPackageFragment packageFragment;
 		private TextField name;
 		private ChoiceBox<String> type;

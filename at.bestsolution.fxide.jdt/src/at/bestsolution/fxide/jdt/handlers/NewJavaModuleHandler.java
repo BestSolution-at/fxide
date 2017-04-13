@@ -31,8 +31,8 @@ import org.eclipse.fx.core.di.Service;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService.ModalityScope;
 
+import at.bestsolution.controls.patternfly.ModalDialog;
 import at.bestsolution.controls.patternfly.PatternFly;
-import at.bestsolution.fxide.jdt.component.LWModalDialog;
 import at.bestsolution.fxide.jdt.services.ModuleTypeService;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -51,7 +51,7 @@ public class NewJavaModuleHandler {
 		dialogService.openDialog(NewProjectDialog.class, ModalityScope.WINDOW);
 	}
 
-	static class NewProjectDialog extends LWModalDialog {
+	static class NewProjectDialog extends ModalDialog {
 		private final IWorkspace workspace;
 		private TextField projectName;
 		private final List<ModuleTypeService> moduleTypes;

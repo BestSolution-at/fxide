@@ -23,6 +23,8 @@ import java.util.function.Consumer;
 
 import org.eclipse.fx.ui.controls.JavaFXCompatUtil;
 import org.eclipse.fx.ui.controls.image.GraphicNode;
+import org.eclipse.fx.ui.controls.stage.Frame;
+import org.eclipse.fx.ui.controls.stage.FrameEvent;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -41,7 +43,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
-public class ModalDialog extends StackPane {
+@SuppressWarnings("restriction")
+public class ModalDialog extends StackPane implements Frame {
 	private Label headerLabel;
 	private BorderPane box;
 	private ObservableList<Button> buttons = FXCollections.observableArrayList();
@@ -126,13 +129,13 @@ public class ModalDialog extends StackPane {
 	}
 
 	public void close() {
-		ModalDialogEvent closeRequest = new ModalDialogEvent(ModalDialogEvent.CLOSE_REQUEST);
+		FrameEvent closeRequest = new FrameEvent(this,FrameEvent.CLOSING);
 		Event.fireEvent(this, closeRequest);
 		if( closeRequest.isConsumed() ) {
 			return;
 		}
 
-		ModalDialogEvent close = new ModalDialogEvent(ModalDialogEvent.CLOSED);
+		FrameEvent close = new FrameEvent(this,FrameEvent.CLOSED);
 		Event.fireEvent(this, close);
 	}
 
@@ -161,7 +164,7 @@ public class ModalDialog extends StackPane {
 			});
 
 			getButtons().addAll(noButton,yesButton);
-			addEventHandler(ModalDialogEvent.CLOSED, evt -> resultConsumer.accept(result));
+			addEventHandler(FrameEvent.CLOSED, evt -> resultConsumer.accept(result));
 		}
 	}
 
@@ -203,7 +206,7 @@ public class ModalDialog extends StackPane {
 			});
 
 			getButtons().addAll(yesButton,noButton,cancelButton);
-			addEventHandler(ModalDialogEvent.CLOSED, evt -> resultConsumer.accept(result));
+			addEventHandler(FrameEvent.CLOSED, evt -> resultConsumer.accept(result));
 		}
 	}
 }

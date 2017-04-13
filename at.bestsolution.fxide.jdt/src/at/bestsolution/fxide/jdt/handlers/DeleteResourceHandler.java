@@ -28,8 +28,8 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService.ModalityScope;
 
+import at.bestsolution.controls.patternfly.ModalDialog;
 import at.bestsolution.fxide.jdt.JDTConstants;
-import at.bestsolution.fxide.jdt.component.LWModalDialog.LWQuestionDialog;
 
 public class DeleteResourceHandler {
 	@CanExecute
@@ -40,7 +40,7 @@ public class DeleteResourceHandler {
 	@Execute
 	public void deleteResource(LightWeightDialogService dialogService,
 			@Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
-		LWQuestionDialog d = new LWQuestionDialog("Delete", "Are you sure you want to delete file " + resource.getName() + "?", b -> {
+		ModalDialog.QuestionDialog d = new ModalDialog.QuestionDialog("Delete", "Are you sure you want to delete file " + resource.getName() + "?", b -> {
 			if( b ) {
 				try {
 					resource.delete(true, null);

@@ -35,9 +35,9 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
+import at.bestsolution.controls.patternfly.ModalDialog;
 import at.bestsolution.controls.patternfly.PatternFly;
 import at.bestsolution.fxide.jdt.JDTConstants;
-import at.bestsolution.fxide.jdt.component.LWModalDialog;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -88,7 +88,7 @@ public class NewPackageHandler {
 		}
 	}
 
-	static class NewPackageDialog extends LWModalDialog {
+	static class NewPackageDialog extends ModalDialog {
 		private final IPackageFragmentRoot root;
 		private final IJavaElement element;
 		private TextField packageName;

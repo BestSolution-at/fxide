@@ -1,25 +1,42 @@
+/**
+ * FX-IDE - JavaFX and Eclipse based IDE
+ *
+ * Copyright (C) 2017 - BestSoltion.at
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+ */
 package at.bestsolution.fxide.app;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import javax.inject.Inject;
 
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.ISaveHandler.Save;
-import org.eclipse.fx.core.ThreadSynchronize.BlockCondition;
-import org.eclipse.fx.ui.controls.Util;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService.ModalityScope;
 import org.eclipse.fx.ui.workbench.renderers.fx.services.SaveDialogPresenter;
 import org.eclipse.fx.ui.workbench.renderers.fx.services.SaveDialogPresenterTypeProvider;
 import org.osgi.service.component.annotations.Component;
 
-import at.bestsolution.controls.patternfly.ModalDialog.YesNoCancel;
-import at.bestsolution.fxide.jdt.component.LWModalDialog.LWYesNoCancelQuestionDialog;
+import at.bestsolution.controls.patternfly.ModalDialog;
 import javafx.scene.layout.Region;
 
-//@Component
+@Component
 public class PatternflySaveDialogPresenterTypeProvider implements SaveDialogPresenterTypeProvider {
 
 	@Override
@@ -28,43 +45,39 @@ public class PatternflySaveDialogPresenterTypeProvider implements SaveDialogPres
 	}
 
 	public static class SaveDialogPresenterImpl implements SaveDialogPresenter {
-//		@Inject
-//		LightWeightDialogService dialogService;
+		@Inject
+		LightWeightDialogService dialogService;
 
 		@Override
-		public List<Save> promptToSave(SaveData data) {
+		public CompletableFuture<List<Save>> promptToSave(SaveData data) {
 			if( data.dirtyParts.size() == 1 ) {
 				MPart part = data.dirtyParts.iterator().next();
-				BlockCondition<YesNoCancel> b = new BlockCondition<>();
-				LWYesNoCancelQuestionDialog d = new LWYesNoCancelQuestionDialog("Unsaved changes", "'"+part.getLabel()+"' has been modified. Save changes?", b::release);
-//				d.setMinWidth(500);
-				d.setMaxWidth(Region.USE_PREF_SIZE);
-				d.setMaxHeight(Region.USE_PREF_SIZE);
-				part.getContext().get(LightWeightDialogService.class).openDialog(d, ModalityScope.WINDOW);
-				List<Save> rv = new ArrayList<>();
-				b.subscribeUnblockedCallback( r -> {
+				CompletableFuture<List<Save>> rv = new CompletableFuture<>();
+				ModalDialog.YesNoCancelQuestionDialog d = new ModalDialog.YesNoCancelQuestionDialog("Unsaved changes", "'"+part.getLabel()+"' has been modified. Save changes?", r -> {
 					switch (r) {
 					case CANCEL:
-						rv.add(Save.CANCEL);
+						rv.complete(Collections.singletonList(Save.CANCEL));
 						break;
 					case YES:
-						rv.add(Save.YES);
+						rv.complete(Collections.singletonList(Save.YES));
 						break;
 					case NO:
-						rv.add(Save.NO);
+						rv.complete(Collections.singletonList(Save.NO));
 						break;
 					default:
-						rv.add(Save.CANCEL);
+						rv.complete(Collections.singletonList(Save.CANCEL));
 						break;
 					}
 				});
-				Util.waitUntil(b);
+				d.setMaxWidth(Region.USE_PREF_SIZE);
+				d.setMaxHeight(Region.USE_PREF_SIZE);
+				dialogService.openDialog(d, ModalityScope.WINDOW);
+
 				return rv;
 			}
 
 			// TODO Auto-generated method stub
 			return null;
 		}
-
 	}
 }
