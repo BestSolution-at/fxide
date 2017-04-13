@@ -11,3 +11,27 @@
 .overlay-container {
 	-fx-background-color: rgba(0,0,0,0.5);
 }
+
+.list-view.single-colored .list-cell {
+	-fx-background-color: transparent;
+}
+
+.list-view.single-colored .list-cell:filled {
+	-fx-border-width: 1 0 0 0;
+	-fx-border-color: pf-list-row-background;
+	-fx-border-style: solid;
+	-fx-padding: 10 15 10 15;
+}
+
+.list-view.single-colored .list-cell:selected {
+	-fx-background: pf-list-row-background;
+}
+
+.list-view.single-colored .list-cell:filled:hover {
+	-fx-background-color: pf-list-row-background;
+}
+
+.list-view .label.row-header {
+	-fx-font-size: 1.1em;
+	-fx-font-weight: bold;
+}
