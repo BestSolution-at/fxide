@@ -62,8 +62,8 @@ import javafx.scene.layout.VBox;
 public class PatternflySaveDialogPresenterTypeProvider implements SaveDialogPresenterTypeProvider {
 
 	@Override
-	public <S extends SaveDialogPresenter> Class<S> getType() {
-		return (Class<S>) SaveDialogPresenterImpl.class;
+	public Class<SaveDialogPresenterImpl> getType() {
+		return SaveDialogPresenterImpl.class;
 	}
 
 	public static class SaveDialogPresenterImpl implements SaveDialogPresenter {
