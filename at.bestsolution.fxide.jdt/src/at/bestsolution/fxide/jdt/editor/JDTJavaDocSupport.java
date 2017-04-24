@@ -27,7 +27,9 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fx.core.IOUtils;
+import org.eclipse.fx.core.ServiceUtils;
 import org.eclipse.fx.text.hover.HtmlString;
+import org.eclipse.fx.ui.services.theme.ThemeManager;
 import org.eclipse.jdt.core.CompletionProposal;
 import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.IField;
@@ -48,22 +50,26 @@ import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.TagElement;
 import org.eclipse.jdt.core.dom.TextElement;
 
+import com.sun.javafx.webkit.ThemeClientImpl;
+
 import at.bestsolution.fxide.jdt.editor.internal.MethodUtil;
 import at.bestsolution.fxide.jdt.editor.internal.SignatureUtil;
 import at.bestsolution.fxide.jdt.text.javadoc.JavadocContentAccess2;
 
 public class JDTJavaDocSupport {
+	private static String defaultCSS = IOUtils.readToString(JDTJavaDocSupport.class.getResourceAsStream("internal/javadoc.css"), Charset.forName("UTF-8"));
+	private static String darkCSS = IOUtils.readToString(JDTJavaDocSupport.class.getResourceAsStream("internal/javadoc-dark.css"), Charset.forName("UTF-8"));
+	private static ThemeManager themeMgr = ServiceUtils.getService(ThemeManager.class).get();
+
 	public static HtmlString toHtml(CompletionProposal proposal, IJavaProject jProject) throws JavaModelException {
+		String content = null;
 		if (proposal.getKind() == org.eclipse.jdt.core.CompletionProposal.FIELD_REF) {
 			IType jType = getOwnerType(proposal, jProject);
 			if( jType != null ) {
 				IField field = jType.getField(String.valueOf(proposal.getName()));
 				if( field != null && field.exists() ) {
 					try {
-						String content = JavadocContentAccess2.getHTMLContent(field, true);
-						if( content != null ) {
-							return new HtmlString("<html><body>"+content+"</body></html>");
-						}
+						content = JavadocContentAccess2.getHTMLContent(field, true);
 					} catch (CoreException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -77,16 +83,17 @@ public class JDTJavaDocSupport {
 				IMethod method = m.resolve();
 				if( method != null && method.exists() ) {
 					try {
-						String content = JavadocContentAccess2.getHTMLContent(method, true);
-						if( content != null ) {
-							return new HtmlString("<html><body>"+content+"</body></html>");
-						}
+						content = JavadocContentAccess2.getHTMLContent(method, true);
 					} catch (CoreException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 			}
+		}
+
+		if( content != null ) {
+			return new HtmlString("<html><header><style>"+ ("theme.dark".equals(themeMgr.getCurrentTheme().getId()) ? darkCSS : defaultCSS) +"</style></header><body>"+content+"</body></html>");
 		}
 
 		return null;
