@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Corext
+Bundle-SymbolicName: at.bestsolution.fxide.jdt.corext
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: at.bestsolution.fxide.jdt.corext.dom,
+ at.bestsolution.fxide.jdt.corext.javadoc,
+ at.bestsolution.fxide.jdt.corext.text,
+ at.bestsolution.fxide.jdt.corext.util
+Import-Package: com.ibm.icu.text;version="56.1.0"
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0",
+ org.eclipse.jdt.core;bundle-version="3.12.2",
+ org.eclipse.core.resources
