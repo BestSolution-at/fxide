@@ -1,3 +1,4 @@
+alert("STARTING");
 /**
  * @license
  * Copyright (C) 2006 Google Inc.
@@ -30,7 +31,7 @@
  * <p>
  * Usage: <ol>
  * <li> include this source file in an html page via
- *   {@code <script type="text/javascript" src="/path/to/prettify.js"></script>}
+
  * <li> define style rules.  See the example page for examples.
  * <li> mark the {@code <pre>} and {@code <code>} tags in your source with
  *    {@code class=prettyprint.}
@@ -722,8 +723,8 @@ var prettyPrint;
     * so decorators should take care that this doesn't result in infinite
     * recursion.  For example, the HTML lexer rule for SCRIPT elements looks
     * something like ['lang-js', /<[s]cript>(.+?)<\/script>/].  This may match
-    * '<script>foo()<\/script>', which would cause the current decorator to
-    * be called with '<script>' which would not match the same rule since
+
+
     * group 1 must not be empty, so it would be instead styled as PR_TAG by
     * the generic tag rule.  The handler registered for the 'js' extension would
     * then be called with 'foo()', and finally, the current decorator would
@@ -1740,3 +1741,4 @@ var prettyPrint;
     });
   }
 })();
+alert("FUCK OFFF");

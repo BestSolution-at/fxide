@@ -59,6 +59,7 @@ import at.bestsolution.fxide.jdt.text.javadoc.JavadocContentAccess2;
 public class JDTJavaDocSupport {
 	private static String defaultCSS = IOUtils.readToString(JDTJavaDocSupport.class.getResourceAsStream("internal/javadoc.css"), Charset.forName("UTF-8"));
 	private static String darkCSS = IOUtils.readToString(JDTJavaDocSupport.class.getResourceAsStream("internal/javadoc-dark.css"), Charset.forName("UTF-8"));
+	private static String prettifyJS = IOUtils.readToString(JDTJavaDocSupport.class.getResourceAsStream("internal/prettify.js"), Charset.forName("UTF-8"));
 	private static ThemeManager themeMgr = ServiceUtils.getService(ThemeManager.class).get();
 
 	public static HtmlString toHtml(CompletionProposal proposal, IJavaProject jProject) throws JavaModelException {
@@ -93,7 +94,8 @@ public class JDTJavaDocSupport {
 		}
 
 		if( content != null ) {
-			return new HtmlString("<html><header><style>"+ ("theme.dark".equals(themeMgr.getCurrentTheme().getId()) ? darkCSS : defaultCSS) +"</style></header><body>"+content+"</body></html>");
+			System.err.println(content);
+			return new HtmlString("<html><header><style>"+ ("theme.dark".equals(themeMgr.getCurrentTheme().getId()) ? darkCSS : defaultCSS) +"</style><script>"+prettifyJS+"\n</script></header><body onload='PR.prettyPrint();'>"+content+"</body></html>");
 		}
 
 		return null;
