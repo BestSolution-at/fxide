@@ -79,7 +79,7 @@ public class NewJavaTypeHandler {
 		}
 
 		if( element != null && element instanceof IPackageFragment ) {
-			dialogService.openDialog(new NewTypeDialog((IPackageFragment) element), ModalityScope.PART);
+			dialogService.openDialog(new NewTypeDialog((IPackageFragment) element), ModalityScope.WINDOW);
 		}
 	}
 
