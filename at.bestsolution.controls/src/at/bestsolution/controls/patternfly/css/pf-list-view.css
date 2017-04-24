@@ -1,0 +1,31 @@
+.pf-list-view > .list-view {
+	-fx-padding: 15;
+}
+
+.pf-list-view > .list-view .list-cell {
+	-fx-background-color: transparent;
+}
+
+.pf-list-view > .list-view .list-cell:filled {
+	-fx-border-width: 1 0 0 0;
+	-fx-border-color: pf-list-row-background;
+	-fx-border-style: solid;
+	-fx-padding: 10 15 10 15;
+}
+
+.pf-list-view > .list-view .list-cell:selected {
+	-fx-background: pf-list-row-background;
+}
+
+.pf-list-view > .list-view .list-cell:filled:hover {
+	-fx-background-color: pf-list-row-background;
+}
+
+.pf-list-view > .list-view .list-cell .pf-list-group-item > GridPane {
+	-fx-hgap: 10;
+}
+
+.pf-list-view > .list-view .list-cell .pf-list-group-item .pf-list-group-item-heading {
+	-fx-font-size: 1.1em;
+	-fx-font-weight: bold;
+}

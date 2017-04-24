@@ -5,5 +5,6 @@ Bundle-SymbolicName: at.bestsolution.controls.demo
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: at.bestsolution.controls.patternfly,
+ at.bestsolution.controls.patternfly.list,
  org.eclipse.fx.ui.controls.stage;version="3.0.0"
 Require-Bundle: org.eclipse.fx.core;bundle-version="3.0.0"

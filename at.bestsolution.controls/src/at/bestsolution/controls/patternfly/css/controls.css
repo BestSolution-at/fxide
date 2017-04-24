@@ -1,4 +1,5 @@
 @IMPORT "modal-dialog.css";
+@IMPORT "pf-list-view.css";
 
 .text-field.tf-default {
 	-fx-border-color: pf-text-field-border;
