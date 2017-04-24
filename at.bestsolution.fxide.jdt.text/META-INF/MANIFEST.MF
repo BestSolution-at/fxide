@@ -10,3 +10,4 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.11.1",
  org.eclipse.core.runtime;bundle-version="3.12.0",
  at.bestsolution.fxide.jdt.corext,
  org.eclipse.text;bundle-version="3.6.0"
+Export-Package: at.bestsolution.fxide.jdt.text.javadoc
