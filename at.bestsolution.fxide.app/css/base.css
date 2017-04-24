@@ -8,6 +8,11 @@
 	-fx-font-size: 14;
 }
 
+.content-proposal-list {
+	-fx-font-family: "Source Code Pro";
+	-fx-font-size: 14;
+}
+
 .overlay-container {
 	-fx-background-color: rgba(0,0,0,0.5);
 }

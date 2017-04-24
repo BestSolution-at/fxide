@@ -73,6 +73,10 @@ public class JDTSourceFileInput implements SourceFileInput, IProblemRequestor {
 		}
 	}
 
+	public JDTWorkingCopyOwner getOwner() {
+		return owner;
+	}
+
 	@PostConstruct
 	protected void init() {
 		if( eventBus != null ) {

@@ -1,21 +1,46 @@
+/**
+ * FX-IDE - JavaFX and Eclipse based IDE
+ *
+ * Copyright (C) 2017 - BestSoltion.at
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+ */
 package at.bestsolution.fxide.jdt.editor;
 
 import org.eclipse.fx.code.editor.services.CompletionProposal;
 import org.eclipse.fx.code.editor.services.ContextInformation;
-import org.eclipse.jdt.core.Flags;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.text.IDocument;
 
 @SuppressWarnings("restriction")
 public class JDTCompletionProposal implements CompletionProposal {
 	private org.eclipse.jdt.core.CompletionProposal jdtProposal;
+	private IJavaProject javaProject;
 
-	public JDTCompletionProposal(org.eclipse.jdt.core.CompletionProposal jdtProposal) {
+	public JDTCompletionProposal(IJavaProject javaProject, org.eclipse.jdt.core.CompletionProposal jdtProposal) {
 		this.jdtProposal = jdtProposal;
+		this.javaProject = javaProject;
 //		System.err.println(String.valueOf(jdtProposal.getName()) + " => " + Flags.isPublic(jdtProposal.getFlags()));
 	}
 
 	public org.eclipse.jdt.core.CompletionProposal getJdtProposal() {
 		return jdtProposal;
+	}
+
+	public IJavaProject getJavaProject() {
+		return javaProject;
 	}
 
 	@Override

@@ -41,6 +41,8 @@ import org.osgi.service.component.annotations.Component;
 
 import at.bestsolution.controls.patternfly.ModalDialog;
 import at.bestsolution.controls.patternfly.PatternFly;
+import at.bestsolution.controls.patternfly.list.PFListGroupItem;
+import at.bestsolution.controls.patternfly.list.PFListView;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -113,7 +115,8 @@ public class PatternflySaveDialogPresenterTypeProvider implements SaveDialogPres
 		private SaveData data;
 		private List<Save> saveList;
 		private final List<Save> defaultList;
-		private ListView<SaveItem> listView;
+//		private ListView<SaveItem> listView;
+		private PFListView<MPart> list;
 
 		public MultiSelectionList(SaveData data, Consumer<List<Save>> resultConsumer) {
 			this.data = data;
@@ -124,14 +127,15 @@ public class PatternflySaveDialogPresenterTypeProvider implements SaveDialogPres
 			setClientArea(createClientArea());
 
 			Button cancel = new Button("Cancel");
+			cancel.setOnAction( e -> close() );
 			PatternFly.defaultButton(cancel);
 			cancel.setCancelButton(true);
 			getButtons().add(cancel);
 
 			Button ok = new Button("Ok");
 			ok.setOnAction( e -> {
-				this.saveList = listView.getItems().stream()
-					.map( i -> i.selected.get() ? Save.YES : Save.NO)
+				data.dirtyParts.stream()
+					.map( p -> list.getSelectedElements().contains(p) ? Save.YES : Save.NO )
 					.collect(Collectors.toList());
 				close();
 				this.saveList = new ArrayList<>(defaultList);
@@ -145,12 +149,23 @@ public class PatternflySaveDialogPresenterTypeProvider implements SaveDialogPres
 		private Node createClientArea() {
 			BorderPane parent = new BorderPane();
 
-			listView = new ListView<>();
-			listView.setStyle("-fx-padding: 15");
-			listView.getStyleClass().add("single-colored");
-			listView.setCellFactory( DirtyPartCell::new );
-			listView.setItems(FXCollections.observableArrayList(data.dirtyParts.stream().map(SaveItem::new).collect(Collectors.toList())));
-			parent.setCenter(listView);
+			list = new PFListView<>();
+			list.getSelectedElements().addAll(data.dirtyParts);
+			list.setGroupItemFactory( m -> {
+				PFListGroupItem i = new PFListGroupItem();
+				i.setHeading(m.getLabel());
+				i.setText(m.getPersistedState().get(Constants.DOCUMENT_URL).substring("module-file:".length()));
+				return i;
+			});
+			list.setElements(FXCollections.observableArrayList(data.dirtyParts));
+			parent.setCenter(list);
+
+//			listView = new ListView<>();
+//			listView.setStyle("-fx-padding: 15");
+//			listView.getStyleClass().add("single-colored");
+//			listView.setCellFactory( DirtyPartCell::new );
+//			listView.setItems(FXCollections.observableArrayList(data.dirtyParts.stream().map(SaveItem::new).collect(Collectors.toList())));
+//			parent.setCenter(listView);
 
 			return parent;
 		}

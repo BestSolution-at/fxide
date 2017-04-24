@@ -34,15 +34,45 @@
 	-fx-background: rgba(230,230,230,0.4);
 }
 
-
-.jdt-new-module-dialog .efx-dialog-title-image {
-	-fx-image: url("che/project_wizban.png");
-}
-
-.jdt-new-type-dialog .efx-dialog-title-image {
-	-fx-image: url("che/java-class_wizban.png");
+.list-cell:selected {
+	-fx-background: rgba(230,230,230,0.4);
 }
 
 .modal-dialog .dialog-content {
 	-fx-padding: 15;
+}
+
+/*
+ * TODO Move to extra css
+ */
+ImageView.field-ref.visibility_private {
+	-fx-image: url("che/vis_private.png");
+}
+
+ImageView.field-ref.visibility_default {
+	-fx-image: url("che/vis_default.png");
+}
+
+ImageView.field-ref.visibility_protected {
+	-fx-image: url("che/vis_protected.png");
+}
+
+ImageView.field-ref.visibility_public {
+	-fx-image: url("che/vis_public.png");
+}
+
+ImageView.method-ref.visibility_private {
+	-fx-image: url("che/vis_private-method.png");
+}
+
+ImageView.method-ref.visibility_default {
+	-fx-image: url("che/vis_default-method.png");
+}
+
+ImageView.method-ref.visibility_protected {
+	-fx-image: url("che/vis_protected-method.png");
+}
+
+ImageView.method-ref.visibility_public {
+	-fx-image: url("che/vis_public-method.png");
 }

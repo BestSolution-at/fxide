@@ -17,27 +17,25 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
-package at.bestsolution.fxide.app;
+package at.bestsolution.fxide.jdt.editor;
 
-import org.eclipse.fx.ui.workbench.renderers.fx.services.FadeDialogTranstionService;
-import org.eclipse.fx.ui.workbench.renderers.fx.services.LightweightDialogTransitionService;
+import org.eclipse.fx.code.editor.Input;
+import org.eclipse.fx.code.editor.fx.services.CompletionProposalPresenter;
+import org.eclipse.fx.code.editor.fx.services.CompletionProposalPresenterTypeProvider;
 import org.osgi.service.component.annotations.Component;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.Interpolator;
-import javafx.util.Duration;
-
+@SuppressWarnings("restriction")
 @Component
-public class DefFadeDialogTranstionService extends FadeDialogTranstionService implements LightweightDialogTransitionService {
+public class JDTCompletionPresenterTypeProvider implements CompletionProposalPresenterTypeProvider {
+
 	@Override
-	protected void configureFadeIn(FadeTransition transition) {
-		super.configureFadeIn(transition);
-		transition.setInterpolator(Interpolator.EASE_BOTH);
+	public Class<? extends CompletionProposalPresenter> getType(Input<?> s) {
+		return JDTCompletionPresenter.class;
 	}
 
 	@Override
-	protected void configureFadeOut(FadeTransition transition) {
-		super.configureFadeOut(transition);
-		transition.setInterpolator(Interpolator.EASE_BOTH);
+	public boolean test(Input<?> t) {
+		return t instanceof JDTSourceFileInput;
 	}
+
 }

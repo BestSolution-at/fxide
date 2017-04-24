@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+
+    Copyright (c) 2012-2017 Codenvy, S.A.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+    Contributors:
+      Codenvy, S.A. - initial API and implementation
+
+-->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="private_method"
+   x="0px"
+   y="0px"
+   width="32px"
+   height="32px"
+   viewBox="0 0 32 32"
+   enable-background="new 0 0 32 32"
+   xml:space="preserve"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="vis_private-method.svg"
+   inkscape:export-filename="/Users/tomschindl/git/fxide/at.bestsolution.fxide.jdt/icons/che/vis_private@2x.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"><metadata
+     id="metadata9"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+     id="defs7" /><sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1426"
+     inkscape:window-height="868"
+     id="namedview5"
+     showgrid="false"
+     inkscape:zoom="7.375"
+     inkscape:cx="16"
+     inkscape:cy="16"
+     inkscape:window-x="321"
+     inkscape:window-y="145"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="private_method" /><path
+     fill-rule="evenodd"
+     clip-rule="evenodd"
+     fill="#CF405F"
+     d="M10.286,8h11.429C22.975,8,24,9.026,24,10.286v11.429  C24,22.975,22.975,24,21.715,24H10.286C9.026,24,8,22.975,8,21.715V10.286C8,9.026,9.026,8,10.286,8L10.286,8z M10.667,10.667  v10.667h10.667V10.667H10.667z"
+     id="path3" /><rect
+     style="opacity:1;fill:#cf405f;fill-opacity:1"
+     id="rect4137"
+     width="13.559322"
+     height="12.881356"
+     x="9.2203388"
+     y="9.6271181"
+     rx="2.625"
+     ry="2.625" /></svg>

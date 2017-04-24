@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+
+    Copyright (c) 2012-2017 Codenvy, S.A.
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+    Contributors:
+      Codenvy, S.A. - initial API and implementation
+
+-->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="public_method"
+   x="0px"
+   y="0px"
+   width="32px"
+   height="32px"
+   viewBox="0 0 32 32"
+   enable-background="new 0 0 32 32"
+   xml:space="preserve"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="vis_public-mthod.svg"
+   inkscape:export-filename="/Users/tomschindl/git/fxide/at.bestsolution.fxide.jdt/icons/che/vis_public@2x.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"><metadata
+     id="metadata9"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+     id="defs7" /><sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1172"
+     inkscape:window-height="765"
+     id="namedview5"
+     showgrid="false"
+     inkscape:zoom="7.375"
+     inkscape:cx="16"
+     inkscape:cy="16"
+     inkscape:window-x="48"
+     inkscape:window-y="22"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="public_method" /><path
+     fill-rule="evenodd"
+     clip-rule="evenodd"
+     fill="#72AD42"
+     d="M16,8c4.418,0,8,3.582,8,8s-3.582,8-8,8s-8-3.582-8-8  S11.582,8,16,8L16,8z M16,10.666c-2.945,0-5.334,2.389-5.334,5.334s2.389,5.334,5.334,5.334s5.334-2.389,5.334-5.334  S18.945,10.666,16,10.666z"
+     id="path3" /><path
+     style="opacity:1;fill:#72ad42;fill-opacity:1"
+     id="path4137"
+     sodipodi:type="arc"
+     sodipodi:cx="16.067799"
+     sodipodi:cy="15.796608"
+     sodipodi:rx="6.4406781"
+     sodipodi:ry="6.1694918"
+     sodipodi:start="0"
+     sodipodi:end="6.2793979"
+     sodipodi:open="true"
+     d="m 22.508477,15.796608 a 6.4406781,6.1694918 0 0 1 -6.43458,6.169489 6.4406781,6.1694918 0 0 1 -6.446765,-6.157806 6.4406781,6.1694918 0 0 1 6.422372,-6.1811499 6.4406781,6.1694918 0 0 1 6.458927,6.1461009" /></svg>

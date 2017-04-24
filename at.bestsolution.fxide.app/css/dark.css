@@ -48,3 +48,7 @@
 	-source-editor-markup-tag: #e9c063;
 	-source-editor-markup-extra: rgb(190, 190, 190);
 }
+
+.content-proposal-doc {
+	-fx-background-color: #4d5052;
+}
