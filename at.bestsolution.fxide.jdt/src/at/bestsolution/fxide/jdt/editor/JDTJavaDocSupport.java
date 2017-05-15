@@ -85,7 +85,9 @@ public class JDTJavaDocSupport {
 				if( method != null && method.exists() ) {
 					try {
 						content = JavadocContentAccess2.getHTMLContent(method, true);
-						content = content.replace("<pre><code>","<pre class=\"prettyprint\"><code class=\"language-java\">");
+						if( content != null ) {
+							content = content.replace("<pre><code>","<pre class=\"prettyprint\"><code class=\"language-java\">");
+						}
 					} catch (CoreException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
