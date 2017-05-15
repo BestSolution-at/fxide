@@ -2,6 +2,7 @@ package at.bestsolution.fxide.jdt.text.javadoc;
 
 public class CodeSanatizer {
 	public static String sanatizeCodeContent(String content) {
+//		System.err.println("INPUT: " + content);
 		if( ! content.contains("{@code") ) {
 			return content;
 		}
@@ -19,6 +20,7 @@ public class CodeSanatizer {
 						counter -= 1;
 						if( counter == 0 ) {
 							b.append("}");
+							fromIndex += 1;
 							break;
 						} else {
 							b.append("#__");
@@ -32,10 +34,11 @@ public class CodeSanatizer {
 				}
 
 			} else {
-				b.append(content.substring(fromIndex+1));
+				b.append(content.substring(fromIndex));
 				break;
 			}
 		}
+//		System.err.println("OUTPUT: " + b.toString());
 
 		return b.toString();
 	}
