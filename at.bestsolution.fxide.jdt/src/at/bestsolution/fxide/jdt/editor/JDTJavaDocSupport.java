@@ -85,6 +85,7 @@ public class JDTJavaDocSupport {
 				if( method != null && method.exists() ) {
 					try {
 						content = JavadocContentAccess2.getHTMLContent(method, true);
+						content = content.replace("<pre><code>","<pre class=\"prettyprint\"><code class=\"language-java\">");
 					} catch (CoreException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -94,7 +95,6 @@ public class JDTJavaDocSupport {
 		}
 
 		if( content != null ) {
-			System.err.println(content);
 			return new HtmlString("<html><header><style>"+ ("theme.dark".equals(themeMgr.getCurrentTheme().getId()) ? darkCSS : defaultCSS) +"</style><script>"+prettifyJS+"\n</script></header><body onload='PR.prettyPrint();'>"+content+"</body></html>");
 		}
 
