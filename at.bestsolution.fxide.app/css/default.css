@@ -1,6 +1,11 @@
 @IMPORT "base.css";
 @IMPORT "platform:/plugin/at.bestsolution.controls/at/bestsolution/controls/patternfly/css/colors.css";
 
+.root {
+	-content-assist-extra-1-color: rgb(200,200,200);
+	-content-assist-extra-1-color-hover: rgb(80,80,80);
+}
+
 .styled-text-area .list-view {
 	-fx-background-color: white;
 

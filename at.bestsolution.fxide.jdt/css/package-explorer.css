@@ -45,6 +45,18 @@
 /*
  * TODO Move to extra css
  */
+.proposal-content {
+	-fx-padding: 0 0 0 10;
+}
+
+.proposal-content .package-name {
+	-fx-text-fill: -content-assist-extra-1-color;
+}
+
+.list-cell:selected .proposal-content .package-name {
+	-fx-text-fill: -content-assist-extra-1-color-hover;
+}
+
 ImageView.field-ref.visibility_private {
 	-fx-image: url("che/vis_private.png");
 }
@@ -75,4 +87,24 @@ ImageView.method-ref.visibility_protected {
 
 ImageView.method-ref.visibility_public {
 	-fx-image: url("che/vis_public-method.png");
+}
+
+ImageView.local-var-ref {
+	-fx-image: url("che/local.png");
+}
+
+ImageView.class-type-ref {
+	-fx-image: url("che/java-class.png");
+}
+
+ImageView.interface-type-ref {
+	-fx-image: url("che/interface-type.png");
+}
+
+ImageView.annotation-type-ref {
+	-fx-image: url("che/annotation-type.png");
+}
+
+ImageView.enum-type-ref {
+	-fx-image: url("che/enum-type.png");
 }

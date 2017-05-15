@@ -6,6 +6,9 @@
     -fx-background: #4d5052;
     -fx-control-inner-background: #4d5052;
     -fx-text-base-color: #c7c7c7;
+
+    -content-assist-extra-1-color: rgb(150,150,150);
+    -content-assist-extra-1-color-hover: rgb(80,80,80);
 }
 
 .source-viewer.styled-text-area .selection-marker {

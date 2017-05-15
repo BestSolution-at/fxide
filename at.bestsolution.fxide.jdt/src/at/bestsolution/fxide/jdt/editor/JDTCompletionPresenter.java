@@ -28,6 +28,7 @@ import org.eclipse.fx.ui.controls.styledtext.TextSelection;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IBuffer;
 import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.ISourceRange;
@@ -66,6 +67,7 @@ public class JDTCompletionPresenter implements CompletionProposalPresenter {
 		public Node getContentNode() {
 			if( proposal.getJdtProposal().getKind() == org.eclipse.jdt.core.CompletionProposal.FIELD_REF ) {
 				HBox box = new HBox();
+				box.getStyleClass().add("proposal-content");
 
 				{
 					Label l = new Label(String.copyValueOf(proposal.getJdtProposal().getName()));
@@ -87,6 +89,7 @@ public class JDTCompletionPresenter implements CompletionProposalPresenter {
 				return box;
 			} else if( proposal.getJdtProposal().getKind() == org.eclipse.jdt.core.CompletionProposal.METHOD_REF ) {
 				HBox box = new HBox();
+				box.getStyleClass().add("proposal-content");
 				box.setMinWidth(0);
 				box.setPrefWidth(0);
 
@@ -131,8 +134,32 @@ public class JDTCompletionPresenter implements CompletionProposalPresenter {
 				}
 
 				return box;
+			} else if( proposal.getJdtProposal().getKind() == org.eclipse.jdt.core.CompletionProposal.TYPE_REF ) {
+				HBox box = new HBox();
+				box.setMinWidth(0);
+				box.setPrefWidth(0);
+				box.getStyleClass().add("proposal-content");
+
+				{
+					Label l = new Label(String.valueOf(Signature.getSimpleName(Signature.toCharArray(proposal.getJdtProposal().getSignature()))));
+					l.setMinWidth(Region.USE_PREF_SIZE);
+					box.getChildren().add(l);
+				}
+
+				{
+					Label l = new Label(" (" + String.valueOf(Signature.getSignatureQualifier(proposal.getJdtProposal().getSignature())) + ")");
+					l.setStyle("-fx-font-weight: bold;");
+					l.setMinSize(0, 0);
+					l.setTextOverrun(OverrunStyle.ELLIPSIS);
+					l.getStyleClass().add("package-name");
+					box.getChildren().add(l);
+				}
+
+				return box;
 			}
-			return new Label(proposal.getLabel().toString());
+			Label label = new Label(proposal.getLabel().toString());
+			label.getStyleClass().add("proposal-content");
+			return label;
 		}
 
 		@Override
@@ -192,6 +219,31 @@ public class JDTCompletionPresenter implements CompletionProposalPresenter {
 				v.getStyleClass().add("field-ref");
 			} else if( proposal.getJdtProposal().getKind() == org.eclipse.jdt.core.CompletionProposal.METHOD_REF ) {
 				v.getStyleClass().add("method-ref");
+			} else if( proposal.getJdtProposal().getKind() == org.eclipse.jdt.core.CompletionProposal.LOCAL_VARIABLE_REF ) {
+				v.getStyleClass().add("local-var-ref");
+			} else if( proposal.getJdtProposal().getKind() == org.eclipse.jdt.core.CompletionProposal.TYPE_REF ) {
+				proposal.getType().map( t -> {
+					try {
+						if( t.isAnnotation() ) {
+							System.err.println("===============>");
+							return "annotation-type-ref";
+						} else if( t.isInterface() ) {
+							return "interface-type-ref";
+						} else if( t.isEnum() ) {
+							return "enum-type-ref";
+						} else {
+							return "class-type-ref";
+						}
+					} catch( JavaModelException e ) {
+						// TODO
+						e.printStackTrace();
+					}
+					return null;
+				}).ifPresent( s -> {
+					v.getStyleClass().add(s);
+				});
+			} else {
+				System.err.println("UNKNOWN: " + proposal.getJdtProposal());
 			}
 
 			//TODO Check more flags

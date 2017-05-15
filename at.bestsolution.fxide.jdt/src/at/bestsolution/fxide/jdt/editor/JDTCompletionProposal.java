@@ -19,9 +19,14 @@
  */
 package at.bestsolution.fxide.jdt.editor;
 
+import java.util.Optional;
+
 import org.eclipse.fx.code.editor.services.CompletionProposal;
 import org.eclipse.fx.code.editor.services.ContextInformation;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.Signature;
 import org.eclipse.jface.text.IDocument;
 
 @SuppressWarnings("restriction")
@@ -46,7 +51,21 @@ public class JDTCompletionProposal implements CompletionProposal {
 	@Override
 	public CharSequence getLabel() {
 		// TODO Auto-generated method stub
-		return jdtProposal.getName() != null ? String.valueOf(jdtProposal.getName()) : "<unknown>";
+		if( jdtProposal.getKind() == org.eclipse.jdt.core.CompletionProposal.TYPE_REF ) {
+			return Signature.toString(String.valueOf(Signature.getTypeErasure(jdtProposal.getSignature())));
+		}
+		return jdtProposal.getName() != null ? String.valueOf(jdtProposal.getName()) : "<!unknown!>";
+	}
+
+	public Optional<IType> getType() {
+		String erasedType = String.valueOf(Signature.getTypeErasure(jdtProposal.getSignature()));
+		try {
+			return Optional.ofNullable(getJavaProject().findType(Signature.toString(erasedType)));
+		} catch (JavaModelException | IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Optional.empty();
 	}
 
 	@Override
