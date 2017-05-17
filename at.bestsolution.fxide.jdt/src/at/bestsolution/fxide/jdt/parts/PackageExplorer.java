@@ -19,9 +19,13 @@
  */
 package at.bestsolution.fxide.jdt.parts;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -74,6 +78,8 @@ public class PackageExplorer {
 	private TreeView<IResource> viewer;
 	private final EditorOpener editorOpener;
 
+	private Map<Path, TreeItem<IResource>> resourceMap = new HashMap<>();
+
 	@Inject
 	private ThreadSynchronize threadSync;
 
@@ -101,7 +107,7 @@ public class PackageExplorer {
 
 		viewer = new TreeView<>();
 		viewer.setCellFactory( (v) -> new ResourceTreeCell());
-		viewer.setRoot(new ContainerItem(ContainerType.WORKSPACE, workspace.getRoot()));
+		viewer.setRoot(new ContainerItem(ContainerType.WORKSPACE, workspace.getRoot(), resourceMap));
 		viewer.setShowRoot(false);
 		viewer.setOnMouseClicked(this::handleClick);
 		FXObservableUtil.onChange(packageExplorerSelection, this::setTreeSelection);
@@ -137,8 +143,9 @@ public class PackageExplorer {
 
 	public boolean visitDelta(IResourceDelta delta) throws CoreException {
 		if( delta.getKind() == IResourceDelta.ADDED ) {
+			//FIXME We need to check if this is a child module
 			if( delta.getResource() instanceof IProject ) {
-				viewer.getRoot().getChildren().add(new ContainerItem(ContainerType.PROJECT, (IContainer) delta.getResource()));
+				viewer.getRoot().getChildren().add(new ContainerItem(ContainerType.PROJECT, (IContainer) delta.getResource(), resourceMap));
 				return true;
 			}
 			Optional<TreeItem<IResource>> opItem = getParentItem(delta.getResource());
@@ -150,7 +157,7 @@ public class PackageExplorer {
 			TreeItem<IResource> item = opItem.get();
 
 			if( delta.getResource() instanceof IFile ) {
-				TreeItem<IResource> newItem = new TreeItem<IResource>(delta.getResource());
+				FileItem newItem = new FileItem((IFile) delta.getResource(),resourceMap);
 
 				Comparator<TreeItem<IResource>> cmp = Comparator.comparing( i -> i.getValue().getName() );
 				Optional<TreeItem<IResource>> referenceItem = item.getChildren()
@@ -169,21 +176,37 @@ public class PackageExplorer {
 				if( containerItem.type == ContainerType.SOURCE
 						|| containerItem.type == ContainerType.PACKAGE
 						|| containerItem.type == ContainerType.TEST) {
-					item.getChildren().add(new ContainerItem(ContainerType.PACKAGE, (IContainer) delta.getResource()));
+					item.getChildren().add(new ContainerItem(ContainerType.PACKAGE, (IContainer) delta.getResource(), resourceMap));
 				}
 			}
 		} else if( delta.getKind() == IResourceDelta.REMOVED ) {
+			System.err.println("REMOVE CALLED: " + delta.getResource());
 			if( delta.getResource() instanceof IProject ) {
 				viewer.getRoot().getChildren().removeIf( i -> delta.getResource().equals(i.getValue()) );
-				return true;
 			}
 			Optional<TreeItem<IResource>> opItem = getParentItem(delta.getResource());
 
 			if( opItem.isPresent() ) {
-				opItem.get().getChildren().removeIf( i -> i.getValue().equals(delta.getResource()));
+				System.err.println("PARENT FOUND");
+				TreeItem<IResource> item = resourceMap.get(Paths.get(delta.getResource().getLocationURI()));
+				if( item != null ) {
+					System.err.println("ITEM " + item);
+					opItem.get().getChildren().remove(item);
+					cleanItemRec(item);
+				}
+//				opItem.get().getChildren().removeIf( i -> i.getValue().equals(delta.getResource()));
 			}
 		}
 		return true;
+	}
+
+	private void cleanItemRec(TreeItem<IResource> item) {
+		if( item.getValue() != null ) {
+			resourceMap.remove(Paths.get(item.getValue().getLocationURI()));
+			for( TreeItem<IResource> c : item.getChildren() ) {
+				cleanItemRec(c);
+			}
+		}
 	}
 
 	private void handleClick(MouseEvent e) {
@@ -196,27 +219,38 @@ public class PackageExplorer {
 	}
 
 	private Optional<TreeItem<IResource>> getParentItem(IResource resource) {
-		TreeItem<IResource> item = viewer.getRoot();
-		List<IContainer> path = new ArrayList<>();
-		IContainer c = resource.getParent();
-		while( c != null && ! (c instanceof IProject) ) {
-			path.add(c);
-			c = c.getParent();
-		}
-		path.add(c);
-
-		for( int i = path.size() - 1; i >= 0; i-- ) {
-			IContainer r = path.get(i);
-			Optional<TreeItem<IResource>> first = item.getChildren()
-					.stream()
-					.filter( it -> it.getValue() != null)
-					.filter( it -> it.getValue().equals(r) ).findFirst();
-			if( ! first.isPresent() ) {
-				return Optional.empty();
+		TreeItem<IResource> item = resourceMap.get(Paths.get(resource.getLocationURI()).getParent());
+		// Check needed because of nested projects where we get 2 events
+		if( item != null ) {
+//			System.err.println("Removing: " + item.getValue() + "@" + System.identityHashCode(item.getValue()) );
+//			System.err.println("PARENT: " + resource.getParent() + "@" + System.identityHashCode(item.getValue()));
+			if( item.getValue().equals(resource.getParent()) ) {
+//				System.err.println("FOUND!!!");
+				return Optional.of(item);
 			}
-			item = first.get();
 		}
-		return Optional.of(item);
+		return Optional.empty();
+//		TreeItem<IResource> item = viewer.getRoot();
+//		List<IContainer> path = new ArrayList<>();
+//		IContainer c = resource.getParent();
+//		while( c != null && ! (c instanceof IProject) ) {
+//			path.add(c);
+//			c = c.getParent();
+//		}
+//		path.add(c);
+//
+//		for( int i = path.size() - 1; i >= 0; i-- ) {
+//			IContainer r = path.get(i);
+//			Optional<TreeItem<IResource>> first = item.getChildren()
+//					.stream()
+//					.filter( it -> it.getValue() != null)
+//					.filter( it -> it.getValue().equals(r) ).findFirst();
+//			if( ! first.isPresent() ) {
+//				return Optional.empty();
+//			}
+//			item = first.get();
+//		}
+//		return Optional.of(item);
 	}
 
 	private TreeItem<IResource> expandParentPath(IResource resource) {
@@ -243,11 +277,13 @@ public class PackageExplorer {
 	}
 
 	private void setTreeSelection(IResource resource) {
-		TreeItem<IResource> item = expandParentPath(resource);
+		if( resource != null ) {
+			TreeItem<IResource> item = expandParentPath(resource);
 
-		item.getChildren().stream().filter( it -> it.getValue() == resource).findFirst().ifPresent( it -> {
-			viewer.getSelectionModel().select(it);
-		} );
+			item.getChildren().stream().filter( it -> it.getValue() == resource).findFirst().ifPresent( it -> {
+				viewer.getSelectionModel().select(it);
+			} );
+		}
 	}
 
 	static class ResourceTreeCell extends TreeCell<IResource> {
@@ -295,19 +331,32 @@ public class PackageExplorer {
 	static class ContainerItem extends LazyTreeItem<IResource> {
 		private final ContainerType type;
 
-		public ContainerItem(ContainerType type, IContainer value) {
-			super(value,  self -> createChildren(self));
+		public ContainerItem(ContainerType type, IContainer container, Map<Path, TreeItem<IResource>> resourceMap) {
+			super(container,  self -> createChildren(self, resourceMap));
 			this.type = type;
+			resourceMap.put(Paths.get(container.getLocationURI()), this);
 		}
 	}
 
-	static List<TreeItem<IResource>> createChildren(TreeItem<IResource> parentItem) {
+	static class FileItem extends TreeItem<IResource> {
+		public FileItem(IFile file, Map<Path, TreeItem<IResource>> resourceMap) {
+			super(file);
+			resourceMap.put(Paths.get(file.getLocationURI()), this);
+		}
+	}
+
+	static List<TreeItem<IResource>> createChildren(TreeItem<IResource> parentItem, Map<Path, TreeItem<IResource>> resourceMap) {
 		ObservableList<TreeItem<IResource>> rv = FXCollections.observableArrayList();
 		ContainerItem containerItem = (ContainerItem)parentItem;
 		IContainer container = (IContainer) containerItem.getValue();
 
 		try {
-			rv.addAll(Stream.of(container.members()).filter( m -> m instanceof IContainer).sorted(Comparator.comparing( m -> m.getName())).map( i -> {
+			Stream<IContainer> memberStream = Stream.of(container.members()).filter( m -> m instanceof IContainer).map( m -> (IContainer)m);
+			// Filter projects who are nested in other projects
+			if( containerItem.type == ContainerType.WORKSPACE ) {
+				memberStream = memberStream.filter( m -> m.getLocation().equals(m.getWorkspace().getRoot().getLocation().append(m.getName())));
+			}
+			rv.addAll(memberStream.sorted(Comparator.comparing( m -> m.getName())).map( i -> {
 				ContainerType type = ContainerType.DEFAULT;
 
 				if( containerItem.type == ContainerType.WORKSPACE ) {
@@ -324,15 +373,28 @@ public class PackageExplorer {
 							type = ContainerType.TEST;
 						}
 					}
+				} else if( containerItem.type == ContainerType.PROJECT ) {
+					ContainerItem pi = Stream.of(i.getWorkspace().getRoot().getProjects())
+						.filter( p -> p.getLocation().equals(i.getLocation()))
+						.findFirst()
+						.map( p -> new ContainerItem(ContainerType.PROJECT, p, resourceMap) )
+						.orElse(null);
+					if( pi != null ) {
+						return pi;
+					}
 				}
-				return new ContainerItem(type, (IContainer) i);
+				return new ContainerItem(type, (IContainer) i, resourceMap);
 			}).collect(Collectors.toList()));
 		} catch (CoreException e) {
 			getLogger().error("Failure while reading folders from container '"+container+"'",e);
 		}
 
 		try {
-			rv.addAll(Stream.of(container.members()).filter( m -> m instanceof IFile).sorted(Comparator.comparing( m -> m.getName())).map(i -> new TreeItem<>(i)).collect(Collectors.toList()));
+			rv.addAll(Stream.of(container.members())
+					.filter( m -> m instanceof IFile)
+					.sorted(Comparator.comparing( m -> m.getName()))
+					.map(i -> new FileItem((IFile)i,resourceMap))
+					.collect(Collectors.toList()));
 		} catch (CoreException e) {
 			getLogger().error("Failure while reading files from container '"+container+"'",e);
 		}
