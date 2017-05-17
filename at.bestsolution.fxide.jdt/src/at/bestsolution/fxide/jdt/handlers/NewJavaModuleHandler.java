@@ -22,10 +22,13 @@ package at.bestsolution.fxide.jdt.handlers;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.fx.core.Status;
 import org.eclipse.fx.core.di.Service;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService;
@@ -33,6 +36,7 @@ import org.eclipse.fx.ui.services.dialog.LightWeightDialogService.ModalityScope;
 
 import at.bestsolution.controls.patternfly.ModalDialog;
 import at.bestsolution.controls.patternfly.PatternFly;
+import at.bestsolution.fxide.jdt.JDTConstants;
 import at.bestsolution.fxide.jdt.services.ModuleTypeService;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -56,11 +60,15 @@ public class NewJavaModuleHandler {
 		private TextField projectName;
 		private final List<ModuleTypeService> moduleTypes;
 		private ChoiceBox<ModuleTypeService> moduleType;
+		private final IResource resource;
 
 		@Inject
-		public NewProjectDialog(IWorkspace workspace, @Service List<ModuleTypeService> moduleTypes) {
+		public NewProjectDialog(IWorkspace workspace,
+				@Service List<ModuleTypeService> moduleTypes,
+				@Optional @Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
 			this.workspace = workspace;
 			this.moduleTypes = moduleTypes;
+			this.resource = resource;
 			setTitle("New Java Module");
 			setMinWidth(500);
 			setMaxWidth(500);
@@ -110,7 +118,7 @@ public class NewJavaModuleHandler {
 
 			IProject project = workspace.getRoot().getProject(projectName.getText());
 			ModuleTypeService moduleTypeService = moduleType.getSelectionModel().getSelectedItem();
-			Status status = moduleTypeService.createModule(project);
+			Status status = moduleTypeService.createModule(project,resource);
 
 			if( status.isOk() ) {
 				close();
