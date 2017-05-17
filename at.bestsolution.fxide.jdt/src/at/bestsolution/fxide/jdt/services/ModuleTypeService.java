@@ -20,9 +20,11 @@
 package at.bestsolution.fxide.jdt.services;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.fx.core.Status;
 
 public interface ModuleTypeService {
+	public String getId();
 	public String getLabel();
-	public Status createModule(IProject project);
+	public Status createModule(IProject project, IResource parentResource);
 }

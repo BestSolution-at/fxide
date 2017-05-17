@@ -31,8 +31,10 @@ import java.util.Map;
 import org.apache.commons.lang.text.StrSubstitutor;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -46,11 +48,10 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.osgi.service.component.annotations.Component;
 
-import at.bestsolution.fxide.jdt.services.JDTModuleTypeService;
 import at.bestsolution.fxide.jdt.services.ModuleTypeService;
 
 @Component
-public class MavenModuleTypeService extends JDTModuleTypeService implements ModuleTypeService {
+public class MavenModuleTypeService implements ModuleTypeService {
 
 	@Override
 	public String getLabel() {
@@ -58,7 +59,12 @@ public class MavenModuleTypeService extends JDTModuleTypeService implements Modu
 	}
 
 	@Override
-	public Status createModule(IProject project) {
+	public String getId() {
+		return "module.maven";
+	}
+
+	@Override
+	public Status createModule(IProject project, IResource resource) {
 		IProjectDescription description = project.getWorkspace().newProjectDescription(project.getName());
 		description.setNatureIds( new String[] {
 			JavaCore.NATURE_ID,
@@ -77,6 +83,25 @@ public class MavenModuleTypeService extends JDTModuleTypeService implements Modu
 			ICommand cmd = description.newCommand();
 			cmd.setBuilderName("org.eclipse.m2e.core.maven2Builder");
 			commands[1] = cmd;
+		}
+
+		if( resource != null ) {
+			// If we get a parent path we create a nested project
+			try {
+				if( resource.getProject().getNature("org.eclipse.m2e.core.maven2Nature") != null ) {
+					IFolder folder = resource.getProject().getFolder(project.getName());
+					if( folder.exists()) {
+						return Status.status(State.ERROR, -1, "Folder already exists",null);
+					}
+					folder.create(true, true, null);
+
+					description.setLocation(folder.getLocation());
+				}
+			} catch (CoreException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return Status.status(State.ERROR, -1, "Could not create parent relation", e1);
+			}
 		}
 
 		description.setBuildSpec(commands);
@@ -180,6 +205,8 @@ public class MavenModuleTypeService extends JDTModuleTypeService implements Modu
 			project.getWorkspace().save(true, null);
 			return Status.ok();
 		} catch (CoreException ex) {
+			//TODO
+			ex.printStackTrace();
 			return Status.status(State.ERROR, -1, "Failed to create project", ex);
 		}
 	}

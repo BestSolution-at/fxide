@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="at.bestsolution.fxide.jdt.maven.MavenParentModuleTypeService">
+   <service>
+      <provide interface="at.bestsolution.fxide.jdt.services.ModuleTypeService"/>
+   </service>
+   <implementation class="at.bestsolution.fxide.jdt.maven.MavenParentModuleTypeService"/>
+</scr:component>

@@ -25,6 +25,7 @@ import java.util.List;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fx.core.Status;
@@ -44,7 +45,12 @@ public class JDTModuleTypeService implements ModuleTypeService {
 	}
 
 	@Override
-	public Status createModule(IProject project) {
+	public String getId() {
+		return "module.plain";
+	}
+
+	@Override
+	public Status createModule(IProject project, IResource resource) {
 		IProjectDescription description = project.getWorkspace().newProjectDescription(project.getName());
 		description.setNatureIds( new String[] {
 			JavaCore.NATURE_ID
