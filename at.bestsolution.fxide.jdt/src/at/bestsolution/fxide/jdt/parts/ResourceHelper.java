@@ -46,7 +46,10 @@ public class ResourceHelper {
 
 	private void handleResourceChanged(IResourceChangeEvent event) {
 		try {
-			event.getDelta().accept(this::visitDelta);
+			IResourceDelta delta = event.getDelta();
+			if( delta != null ) {
+				delta.accept(this::visitDelta);
+			}
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

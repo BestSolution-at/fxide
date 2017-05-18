@@ -168,6 +168,9 @@ public class PackageExplorer {
 			}
 
 			TreeItem<IResource> item = opItem.get();
+			if( item.getChildren().size() == 1 || item.getChildren().get(0).getValue() == null ) {
+				return false;
+			}
 
 			if( delta.getResource() instanceof IFile ) {
 				FileItem newItem = new FileItem((IFile) delta.getResource(),resourceMap);
@@ -218,7 +221,7 @@ public class PackageExplorer {
 
 	private void cleanItemRec(TreeItem<IResource> item) {
 		if( item.getValue() != null ) {
-			resourceMap.remove(Paths.get(item.getValue().getLocationURI()));
+			resourceMap.values().remove(item.getValue());
 			for( TreeItem<IResource> c : item.getChildren() ) {
 				cleanItemRec(c);
 			}
