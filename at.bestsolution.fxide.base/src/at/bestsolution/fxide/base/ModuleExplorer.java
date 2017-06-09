@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
  */
-package at.bestsolution.fxide.jdt.parts;
+package at.bestsolution.fxide.base;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,6 +36,7 @@ import javax.inject.Inject;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -52,7 +53,6 @@ import org.eclipse.fx.core.log.LoggerCreator;
 import org.eclipse.fx.core.observable.FXObservableUtil;
 import org.eclipse.fx.ui.controls.tree.LazyTreeItem;
 
-import at.bestsolution.fxide.jdt.JDTConstants;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -64,12 +64,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
 @SuppressWarnings("restriction")
-public class PackageExplorer {
+public class ModuleExplorer {
 	private static Logger LOGGER;
 
 	private static Logger getLogger() {
 		if( LOGGER == null ) {
-			LOGGER = LoggerCreator.createLogger(PackageExplorer.class);
+			LOGGER = LoggerCreator.createLogger(ModuleExplorer.class);
 		}
 		return LOGGER;
 	}
@@ -87,8 +87,10 @@ public class PackageExplorer {
 	@Inject
 	private ResourceHelper resourceHelper;
 
+	private static final boolean PACK_PACKAGES = false;
+
 	@Inject
-	public PackageExplorer(@ContextValue(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) Property<IResource> packageExplorerSelection, EditorOpener editorOpener) {
+	public ModuleExplorer(@ContextValue(BaseConstants.CTX_PACKAGE_EXPLORER_SELECTION) Property<IResource> packageExplorerSelection, EditorOpener editorOpener) {
 		this.packageExplorerSelection = packageExplorerSelection;
 		this.editorOpener = editorOpener;
 	}
@@ -168,7 +170,7 @@ public class PackageExplorer {
 			}
 
 			TreeItem<IResource> item = opItem.get();
-			if( item.getChildren().size() == 1 || item.getChildren().get(0).getValue() == null ) {
+			if( item.getChildren().size() == 1 && item.getChildren().get(0).getValue() == null ) {
 				return false;
 			}
 
@@ -202,6 +204,13 @@ public class PackageExplorer {
 					item.getChildren().add(pi);
 				}
 			}
+
+			if( PACK_PACKAGES ) {
+				if( item.getParent() == null ) {
+					System.err.println("This is a virtual node");
+				}
+			}
+
 		} else if( delta.getKind() == IResourceDelta.REMOVED ) {
 			if( delta.getResource() instanceof IProject ) {
 				viewer.getRoot().getChildren().removeIf( i -> delta.getResource().equals(i.getValue()) );
@@ -297,7 +306,8 @@ public class PackageExplorer {
 			if( item != null && ! empty ) {
 				if( getTreeItem() instanceof ContainerItem ) {
 					ContainerItem c = (ContainerItem) getTreeItem();
-					setText(c.getValue().getName());
+					String prefix = c.emptyParentContainers.stream().map( i -> i.getValue().getName()).collect(Collectors.joining("."));
+					setText(prefix.length() == 0 ? c.getValue().getName() : prefix + "." + c.getValue().getName());
 					currentStyleClass.add("folder-"+c.type.name().toLowerCase());
 				} else {
 					setText(item.getName());
@@ -326,11 +336,16 @@ public class PackageExplorer {
 
 	static class ContainerItem extends LazyTreeItem<IResource> {
 		private final ContainerType type;
+		private ObservableList<ContainerItem> emptyParentContainers = FXCollections.observableArrayList();
 
 		public ContainerItem(ContainerType type, IContainer container, Map<Path, TreeItem<IResource>> resourceMap, ResourceHelper helper) {
 			super(container,  self -> createChildren(self, resourceMap, helper));
 			this.type = type;
 			resourceMap.put(Paths.get(container.getLocationURI()), this);
+		}
+
+		public ObservableList<ContainerItem> getEmptyParentContainers() {
+			return emptyParentContainers;
 		}
 	}
 
@@ -353,13 +368,25 @@ public class PackageExplorer {
 			}
 			rv.addAll(memberStream.sorted(Comparator.comparing( m -> m.getName())).map( i -> {
 				ContainerType type = ContainerType.DEFAULT;
-
+				List<ContainerItem> emptyContainers = new ArrayList<>();
 				if( containerItem.type == ContainerType.WORKSPACE ) {
 					type = ContainerType.PROJECT;
 				} else if( containerItem.type == ContainerType.SOURCE
 						|| containerItem.type == ContainerType.PACKAGE
 						|| containerItem.type == ContainerType.TEST) {
 					type = ContainerType.PACKAGE;
+
+					if( PACK_PACKAGES ) {
+						try {
+							while( i.members().length == 1 && i.members()[0] instanceof IFolder ) {
+								emptyContainers.add(new ContainerItem(type, i, resourceMap, helper));
+								i = (IContainer) i.members()[0];
+							}
+						} catch (CoreException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				} else if( containerItem.type == ContainerType.DEFAULT ) {
 					if( "java".equals(i.getName()) && i.getParent() != null ) {
 						if( i.getParent().getName().equals("main") ) {
@@ -369,8 +396,9 @@ public class PackageExplorer {
 						}
 					}
 				} else if( containerItem.type == ContainerType.PROJECT ) {
+					IContainer fi = i;
 					ContainerItem pi = Stream.of(i.getWorkspace().getRoot().getProjects())
-						.filter( p -> p.getLocation().equals(i.getLocation()))
+						.filter( p -> p.getLocation().equals(fi.getLocation()))
 						.findFirst()
 						.map( p -> new ContainerItem(ContainerType.PROJECT, p, resourceMap,helper) )
 						.orElse(null);
@@ -378,7 +406,9 @@ public class PackageExplorer {
 						return pi;
 					}
 				}
-				return new ContainerItem(type, (IContainer) i, resourceMap, helper);
+				ContainerItem item = new ContainerItem(type, (IContainer) i, resourceMap, helper);
+				item.emptyParentContainers.setAll(emptyContainers);
+				return item;
 			}).collect(Collectors.toList()));
 		} catch (CoreException e) {
 			getLogger().error("Failure while reading folders from container '"+container+"'",e);

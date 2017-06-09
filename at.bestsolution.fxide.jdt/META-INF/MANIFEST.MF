@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.jdt.core;bundle-version="3.12.2",
  org.eclipse.text;bundle-version="3.6.0",
  org.eclipse.core.filebuffers;bundle-version="3.6.0",
  at.bestsolution.fxide.jdt.text
-Import-Package: javax.inject;version="1.0.0",
+Import-Package: at.bestsolution.fxide.base,
+ javax.inject;version="1.0.0",
  org.eclipse.fx.code.editor;version="3.0.0",
  org.eclipse.fx.code.editor.fx.services;version="3.0.0",
  org.eclipse.fx.code.editor.services;version="3.0.0",
@@ -25,6 +26,7 @@ Import-Package: javax.inject;version="1.0.0",
  org.eclipse.fx.core.function;version="3.0.0",
  org.eclipse.fx.core.log;version="3.0.0",
  org.eclipse.fx.core.observable;version="3.0.0",
+ org.eclipse.fx.core.preferences;version="3.0.0",
  org.eclipse.fx.core.text;version="3.0.0",
  org.eclipse.fx.text.hover;version="3.0.0",
  org.eclipse.fx.text.ui.contentassist;version="3.0.0",
@@ -42,4 +44,5 @@ Service-Component: OSGI-INF/at.bestsolution.fxide.jdt.editor.JDTSourceFileInputT
  OSGI-INF/at.bestsolution.fxide.jdt.editor.JDTProposalComputerTypeProvider.xml,
  OSGI-INF/at.bestsolution.fxide.jdt.editor.JDTCompletionPresenterTypeProvider.xml
 Bundle-ActivationPolicy: lazy
-Export-Package: at.bestsolution.fxide.jdt.services
+Export-Package: at.bestsolution.fxide.jdt.parts,
+ at.bestsolution.fxide.jdt.services

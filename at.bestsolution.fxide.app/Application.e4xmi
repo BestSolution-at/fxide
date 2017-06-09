@@ -2,15 +2,18 @@
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_AScWkf_4EeakkKbUbj78cg" elementId="org.eclipse.e4.application" bindingContexts="_AScWkP_4EeakkKbUbj78cg">
   <children xsi:type="basic:TrimmedWindow" xmi:id="_K8hOcAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.trimmedwindow.0" x="50" y="50" width="1280" height="1024">
     <children xsi:type="basic:PartSashContainer" xmi:id="_MOLDkAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.partsashcontainer.0" horizontal="true">
-      <children xsi:type="basic:Part" xmi:id="_NqepgAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.part.modules" containerData="1" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.parts.PackageExplorer" label="Modules" iconURI="platform:/plugin/at.bestsolution.fxide.jdt/css/che/modules.png">
+      <children xsi:type="basic:Part" xmi:id="_NqepgAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.part.modules" containerData="1" contributionURI="bundleclass://at.bestsolution.fxide.base/at.bestsolution.fxide.base.ModuleExplorer" label="Modules" iconURI="platform:/plugin/at.bestsolution.fxide.jdt/css/che/modules.png">
         <tags>showTopTrimArea</tags>
         <tags>fx_no_auto_resize</tags>
         <handlers xmi:id="_NlBcMA54Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.handler.5" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.handlers.DeleteResourceHandler" command="_VW1dkA52Eee2Luf5eLZdWw"/>
       </children>
-      <children xsi:type="basic:PartStack" xmi:id="_UbY8oAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.partstack.0" containerData="3">
-        <persistedState key="fx.stack.tabslocation" value="BOTTOM"/>
-        <tags>editorContainer</tags>
-        <tags>showTopTrimArea</tags>
+      <children xsi:type="basic:PartSashContainer" xmi:id="_oAcNwEVwEeeDBd2PRr3Gyw" elementId="at.bestsolution.fxide.app.partsashcontainer.1" containerData="3">
+        <children xsi:type="basic:PartStack" xmi:id="_UbY8oAAKEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.partstack.0" containerData="3">
+          <persistedState key="fx.stack.tabslocation" value="BOTTOM"/>
+          <tags>editorContainer</tags>
+          <tags>showTopTrimArea</tags>
+        </children>
+        <children xsi:type="basic:Part" xmi:id="_uXE_sEVwEeeDBd2PRr3Gyw" elementId="at.bestsolution.fxide.app.part.console-view" visible="false" containerData="1" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.parts.Console"/>
       </children>
     </children>
     <variables>packageexplorer.selection</variables>
@@ -34,6 +37,12 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_N_iDYA53Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.handledmenuitem.delete" label="Delete" command="_VW1dkA52Eee2Luf5eLZdWw"/>
       </children>
     </mainMenu>
+    <trimBars xmi:id="_9eV5wEVwEeeDBd2PRr3Gyw" elementId="at.bestsolution.fxide.app.trimbar.0" side="Bottom">
+      <children xsi:type="menu:ToolControl" xmi:id="_-Br3YEVwEeeDBd2PRr3Gyw" elementId="at.bestsolution.fxide.app.toolcontrol.0" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.parts.ConsoleToolControl">
+        <tags>Container:HBox</tags>
+        <tags>fillspace</tags>
+      </children>
+    </trimBars>
   </children>
   <handlers xmi:id="_kwwMEAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handler.0" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.handlers.NewJavaModuleHandler" command="_d4AyoAALEeekkKbUbj78cg"/>
   <handlers xmi:id="_nZdTsAALEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.handler.1" contributionURI="bundleclass://at.bestsolution.fxide.jdt/at.bestsolution.fxide.jdt.handlers.NewPackageHandler" command="_gke_8AALEeekkKbUbj78cg"/>
@@ -66,6 +75,9 @@
   <commands xmi:id="_DF_G8A53Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.command.cut" commandName="Cut"/>
   <commands xmi:id="_EziN4A53Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.command.paste" commandName="Paste"/>
   <commands xmi:id="_Hm4IgBsKEeeVNr_f-Uafhg" elementId="at.bestsolution.fxide.app.command.save" commandName="Save"/>
+  <commands xmi:id="_h-Z2UDpNEeezycGrq9k8sA" elementId="at.bestsolution.fxide.app.command.createjavamodule" commandName="Create Java Module"/>
+  <commands xmi:id="_mdXU8DpNEeezycGrq9k8sA" elementId="at.bestsolution.fxide.app.command.createjavapackage" commandName="Create Java Package"/>
+  <commands xmi:id="_oWdkkDpNEeezycGrq9k8sA" elementId="at.bestsolution.fxide.app.command.createjavatype" commandName="Create Java Type"/>
   <addons xmi:id="_AScWlP_4EeakkKbUbj78cg" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_AScWlf_4EeakkKbUbj78cg" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_AScWlv_4EeakkKbUbj78cg" elementId="org.eclipse.fx.ui.keybindings.e4.service" contributionURI="bundleclass://org.eclipse.fx.ui.keybindings.e4/org.eclipse.fx.ui.keybindings.e4.BindingServiceAddon"/>
@@ -76,4 +88,5 @@
   <addons xmi:id="_kbosgABfEeekkKbUbj78cg" elementId="at.bestsolution.fxide.app.addon.0" contributionURI="bundleclass://at.bestsolution.fxide.app/at.bestsolution.fxide.app.FontLoader"/>
   <addons xmi:id="_ue70UA5_Eee2Luf5eLZdWw" elementId="at.bestsolution.fxide.app.addon.1" contributionURI="bundleclass://at.bestsolution.fxide.app/at.bestsolution.fxide.app.WorkspaceTrackerAddon"/>
   <addons xmi:id="_q7oW8BsHEeeVNr_f-Uafhg" elementId="at.bestsolution.fxide.app.addon.2" contributionURI="bundleclass://at.bestsolution.fxide.app/at.bestsolution.fxide.app.DirtyTrackerAddon"/>
+  <addons xmi:id="_AKZooEV3EeeDBd2PRr3Gyw" elementId="at.bestsolution.fxide.app.addon.3" contributionURI="bundleclass://at.bestsolution.fxide.app/at.bestsolution.fxide.app.ViewVisibleAddon"/>
 </application:Application>

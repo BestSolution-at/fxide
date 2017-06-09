@@ -21,11 +21,13 @@ package at.bestsolution.fxide.jdt.handlers;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.stream.Stream;
 
 import javax.inject.Named;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
@@ -35,11 +37,12 @@ import org.eclipse.fx.ui.services.dialog.LightWeightDialogService;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService.ModalityScope;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 
 import at.bestsolution.controls.patternfly.ModalDialog;
 import at.bestsolution.controls.patternfly.PatternFly;
-import at.bestsolution.fxide.jdt.JDTConstants;
+import at.bestsolution.fxide.base.BaseConstants;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -54,7 +57,7 @@ import javafx.scene.layout.VBox;
 
 public class NewJavaTypeHandler {
 	@CanExecute
-	public boolean isEnabled(@Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
+	public boolean isEnabled(@Named(BaseConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
 		if( resource == null ) {
 			return false;
 		}
@@ -70,7 +73,7 @@ public class NewJavaTypeHandler {
 	}
 
 	@Execute
-	public void createType(LightWeightDialogService dialogService, @Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
+	public void createType(LightWeightDialogService dialogService, @Named(BaseConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
 		IJavaElement element;
 		if( resource instanceof IFile ) {
 			element = JavaCore.create(resource.getParent());
@@ -87,6 +90,7 @@ public class NewJavaTypeHandler {
 		private final IPackageFragment packageFragment;
 		private TextField name;
 		private ChoiceBox<String> type;
+		private TextField packageName;
 
 		public NewTypeDialog(IPackageFragment packageFragment) {
 			setTitle("New Java Type");
@@ -122,8 +126,8 @@ public class NewJavaTypeHandler {
 				Label l = PatternFly.defaultLabel(new Label());
 				l.setText("Package");
 
-				TextField packageName = PatternFly.defaultTextField(new TextField());
-				packageName.setEditable(false);
+				packageName = PatternFly.defaultTextField(new TextField());
+//				packageName.setEditable(false);
 				packageName.setText(packageFragment.getElementName());
 				box.getChildren().addAll(l,packageName);
 				pane.getChildren().add(box);
@@ -156,7 +160,27 @@ public class NewJavaTypeHandler {
 
 		protected void okPressed(ActionEvent evt) {
 			try {
-				IContainer c = (IContainer) packageFragment.getUnderlyingResource();
+				IContainer c = null;
+				if( packageFragment.getElementName().equals(packageName.getText()) ) {
+					c = (IContainer) packageFragment.getUnderlyingResource();
+				} else {
+					IPackageFragmentRoot[] pRoots = packageFragment.getJavaProject().getAllPackageFragmentRoots();
+					IPackageFragmentRoot pRoot = Stream.of(pRoots)
+						.filter( r -> packageFragment.getResource().getLocationURI().toString().startsWith(r.getResource().getLocationURI().toString()))
+						.findFirst()
+						.orElse(null);
+					if( pRoot == null ) {
+						return;
+					}
+
+					c = (IContainer) pRoot.getResource();
+					for( String s : packageName.getText().split("\\.") ) {
+						c = c.getFolder(new Path(s));
+						if( ! c.exists() ) {
+							((IFolder)c).create(true, true, null);
+						}
+					}
+				}
 				IFile file = c.getFile(new Path(name.getText()+".java"));
 
 				String fileContent;

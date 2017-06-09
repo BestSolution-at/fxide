@@ -29,17 +29,17 @@ import org.eclipse.fx.ui.services.dialog.LightWeightDialogService;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService.ModalityScope;
 
 import at.bestsolution.controls.patternfly.ModalDialog;
-import at.bestsolution.fxide.jdt.JDTConstants;
+import at.bestsolution.fxide.base.BaseConstants;
 
 public class DeleteResourceHandler {
 	@CanExecute
-	public boolean canDelete(@Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
+	public boolean canDelete(@Named(BaseConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
 		return resource != null;
 	}
 
 	@Execute
 	public void deleteResource(LightWeightDialogService dialogService,
-			@Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
+			@Named(BaseConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
 		ModalDialog.QuestionDialog d = new ModalDialog.QuestionDialog("Delete", "Are you sure you want to delete file " + resource.getName() + "?", b -> {
 			if( b ) {
 				try {

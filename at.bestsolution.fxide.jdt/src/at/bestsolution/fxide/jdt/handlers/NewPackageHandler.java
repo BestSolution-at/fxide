@@ -37,7 +37,7 @@ import org.eclipse.jdt.core.JavaModelException;
 
 import at.bestsolution.controls.patternfly.ModalDialog;
 import at.bestsolution.controls.patternfly.PatternFly;
-import at.bestsolution.fxide.jdt.JDTConstants;
+import at.bestsolution.fxide.base.BaseConstants;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -58,7 +58,7 @@ public class NewPackageHandler {
 	}
 
 	@CanExecute
-	public boolean canCreatePackage(@Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
+	public boolean canCreatePackage(@Named(BaseConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
 		IJavaElement element;
 		if( resource instanceof IFile ) {
 			element = JavaCore.create(resource.getParent());
@@ -70,7 +70,7 @@ public class NewPackageHandler {
 	}
 
 	@Execute
-	public void createPackage(LightWeightDialogService dialogService, @Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
+	public void createPackage(LightWeightDialogService dialogService, @Named(BaseConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
 		IJavaElement element;
 		if( resource instanceof IFile ) {
 			element = JavaCore.create(resource.getParent());

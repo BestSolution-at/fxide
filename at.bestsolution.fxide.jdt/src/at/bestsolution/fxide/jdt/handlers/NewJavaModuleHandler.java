@@ -36,7 +36,7 @@ import org.eclipse.fx.ui.services.dialog.LightWeightDialogService.ModalityScope;
 
 import at.bestsolution.controls.patternfly.ModalDialog;
 import at.bestsolution.controls.patternfly.PatternFly;
-import at.bestsolution.fxide.jdt.JDTConstants;
+import at.bestsolution.fxide.base.BaseConstants;
 import at.bestsolution.fxide.jdt.services.ModuleTypeService;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -65,7 +65,7 @@ public class NewJavaModuleHandler {
 		@Inject
 		public NewProjectDialog(IWorkspace workspace,
 				@Service List<ModuleTypeService> moduleTypes,
-				@Optional @Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
+				@Optional @Named(BaseConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
 			this.workspace = workspace;
 			this.moduleTypes = moduleTypes;
 			this.resource = resource;

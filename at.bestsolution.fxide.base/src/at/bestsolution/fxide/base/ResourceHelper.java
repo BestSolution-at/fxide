@@ -1,4 +1,4 @@
-package at.bestsolution.fxide.jdt.parts;
+package at.bestsolution.fxide.base;
 
 import java.util.ArrayList;
 import java.util.Arrays;

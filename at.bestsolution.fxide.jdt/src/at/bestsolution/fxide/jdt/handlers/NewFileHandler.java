@@ -28,16 +28,17 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.fx.ui.controls.dialog.TitleAreaDialog;
 import org.eclipse.fx.ui.services.dialog.LightWeightDialogService;
 
-import at.bestsolution.fxide.jdt.JDTConstants;
+import at.bestsolution.fxide.base.BaseConstants;
+
 
 public class NewFileHandler {
 	@CanExecute
-	public boolean canCreate(@Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
+	public boolean canCreate(@Named(BaseConstants.CTX_PACKAGE_EXPLORER_SELECTION) IResource resource) {
 		return resource instanceof IFolder;
 	}
 
 	@Execute
-	public void createNewFile(LightWeightDialogService dialogService, @Named(JDTConstants.CTX_PACKAGE_EXPLORER_SELECTION) IFolder resource) {
+	public void createNewFile(LightWeightDialogService dialogService, @Named(BaseConstants.CTX_PACKAGE_EXPLORER_SELECTION) IFolder resource) {
 
 	}
 
