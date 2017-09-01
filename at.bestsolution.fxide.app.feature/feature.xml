@@ -141,4 +141,25 @@
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="at.bestsolution.fxide.base.vm"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="at.bestsolution.fxide.base.vm.resources"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="at.bestsolution.fxide.base.vm.resources.e4"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

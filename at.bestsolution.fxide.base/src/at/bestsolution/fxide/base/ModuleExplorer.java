@@ -19,42 +19,25 @@
  */
 package at.bestsolution.fxide.base;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fx.code.editor.services.EditorOpener;
-import org.eclipse.fx.core.Subscription;
-import org.eclipse.fx.core.ThreadSynchronize;
-import org.eclipse.fx.core.di.ContextValue;
-import org.eclipse.fx.core.log.Logger;
-import org.eclipse.fx.core.log.LoggerCreator;
+import org.eclipse.fx.core.bindings.FXBindings;
 import org.eclipse.fx.core.observable.FXObservableUtil;
 import org.eclipse.fx.ui.controls.tree.LazyTreeItem;
 
-import javafx.beans.property.Property;
+import at.bestsolution.fxide.base.vm.VM_ModuleExplorer;
+import at.bestsolution.fxide.base.vm.VM_ModuleExplorer.VM_ContainerNode;
+import at.bestsolution.fxide.base.vm.VM_ModuleExplorer.VM_ExplorerNode;
+import at.bestsolution.fxide.base.vm.VM_ModuleExplorer.VM_FileNode;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -63,376 +46,117 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
-@SuppressWarnings("restriction")
 public class ModuleExplorer {
-	private static Logger LOGGER;
-
-	private static Logger getLogger() {
-		if( LOGGER == null ) {
-			LOGGER = LoggerCreator.createLogger(ModuleExplorer.class);
-		}
-		return LOGGER;
+	@Inject
+	VM_ModuleExplorer vm;
+	private TreeView<VM_ExplorerNode> viewer;
+	
+	private FXObservableUtil.Instance tracker = new FXObservableUtil.Instance();
+	
+	@PostConstruct
+	void init(BorderPane p) {
+		viewer = new TreeView<>();
+		viewer.setCellFactory(ModuleExplorerTreeCell::new);
+		viewer.setShowRoot(false);
+		viewer.setRoot(new ContainerTreeItem(vm.root()));
+		viewer.setOnMouseClicked(this::handleClick);
+		
+		
+		ObservableList<TreeItem<VM_ExplorerNode>> selectedItems = viewer.getSelectionModel().getSelectedItems();
+		tracker.onChange(selectedItems, this::handleSelectedItemsChange);
+		
+		ReadOnlyObjectProperty<TreeItem<VM_ExplorerNode>> focusedItem = viewer.getSelectionModel().selectedItemProperty();
+		tracker.onChange(focusedItem, this::handleSelectedItemChange);
+		
+		p.setCenter(viewer);
 	}
-
-	private final Property<IResource> packageExplorerSelection;
-	private List<Subscription> subscriptions = new ArrayList<>();
-	private TreeView<IResource> viewer;
-	private final EditorOpener editorOpener;
-
-	private Map<Path, TreeItem<IResource>> resourceMap = new HashMap<>();
-
-	@Inject
-	private ThreadSynchronize threadSync;
-
-	@Inject
-	private ResourceHelper resourceHelper;
-
-	private static final boolean PACK_PACKAGES = false;
-
-	@Inject
-	public ModuleExplorer(@ContextValue(BaseConstants.CTX_PACKAGE_EXPLORER_SELECTION) Property<IResource> packageExplorerSelection, EditorOpener editorOpener) {
-		this.packageExplorerSelection = packageExplorerSelection;
-		this.editorOpener = editorOpener;
-	}
-
+	
 	@PreDestroy
 	void cleanup() {
-		subscriptions.forEach( Subscription::dispose );
+		tracker.dispose();
 	}
-
-	@PostConstruct
-	public void init(BorderPane parent, IWorkspace workspace) {
-		try {
-			workspace.getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} //FIXME Remove that
-
-		workspace.addResourceChangeListener(this::handleResourceChanged);
-
-		viewer = new TreeView<>();
-		viewer.setCellFactory( (v) -> new ResourceTreeCell());
-		viewer.setRoot(new ContainerItem(ContainerType.WORKSPACE, workspace.getRoot(), resourceMap, resourceHelper));
-		viewer.setShowRoot(false);
-		viewer.setOnMouseClicked(this::handleClick);
-		FXObservableUtil.onChange(packageExplorerSelection, this::setTreeSelection);
-		FXObservableUtil.onChange(viewer.getSelectionModel().selectedItemProperty(), o -> {
-			if( o != null ) {
-				packageExplorerSelection.setValue(o.getValue());
-			} else {
-				packageExplorerSelection.setValue(null);
-			}
-		});
-
-		parent.setCenter(viewer);
-	}
-
-	private void handleResourceChanged(IResourceChangeEvent event) {
-		Runnable code = () -> {
-			try {
-				if( event.getDelta() != null ) {
-					event.getDelta().accept(this::visitDelta);
-				}
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		};
-
-		if( threadSync.isCurrent() ) {
-			code.run();
-		} else {
-			threadSync.asyncExec( code );
-		}
-	}
-
-	public boolean visitDelta(IResourceDelta delta) throws CoreException {
-		if( delta.getKind() == IResourceDelta.ADDED ) {
-			if( delta.getResource() instanceof IProject ) {
-				if( resourceHelper.isRootProject((IProject) delta.getResource()) ) {
-					viewer.getRoot().getChildren().add(new ContainerItem(ContainerType.PROJECT, (IContainer) delta.getResource(), resourceMap, resourceHelper));
-				} else {
-					TreeItem<IResource> item = resourceMap.get(Paths.get(delta.getResource().getLocationURI()));
-					if( item != null ) {
-						ContainerItem i = new ContainerItem(ContainerType.PROJECT, (IContainer) delta.getResource(), resourceMap, resourceHelper);
-						TreeItem<IResource> owner = item.getParent();
-						owner.getChildren().remove(item);
-						owner.getChildren().add(i);
-					}
-				}
-				return true;
-			}
-			Optional<TreeItem<IResource>> opItem = getParentItem(delta.getResource());
-
-			if( ! opItem.isPresent() ) {
-				return true;
-			}
-
-			TreeItem<IResource> item = opItem.get();
-			if( item.getChildren().size() == 1 && item.getChildren().get(0).getValue() == null ) {
-				return false;
-			}
-
-			if( delta.getResource() instanceof IFile ) {
-				FileItem newItem = new FileItem((IFile) delta.getResource(),resourceMap);
-
-				Comparator<TreeItem<IResource>> cmp = Comparator.comparing( i -> i.getValue().getName() );
-				Optional<TreeItem<IResource>> referenceItem = item.getChildren()
-					.stream()
-					.filter( i -> i.getValue() instanceof IFile)
-					.filter( i -> cmp.compare(i, newItem) > 0)
-					.findFirst();
-
-				if( referenceItem.isPresent() ) {
-					item.getChildren().add(item.getChildren().indexOf(referenceItem.get()),newItem);
-				} else {
-					item.getChildren().add(newItem);
-				}
-			} else {
-				ContainerItem containerItem = (ContainerItem) item;
-				if( containerItem.type == ContainerType.SOURCE
-						|| containerItem.type == ContainerType.PACKAGE
-						|| containerItem.type == ContainerType.TEST) {
-					item.getChildren().add(new ContainerItem(ContainerType.PACKAGE, (IContainer) delta.getResource(), resourceMap, resourceHelper));
-				} else {
-					ContainerItem pi = Stream.of(ResourcesPlugin.getWorkspace().getRoot().getProjects())
-							.filter( p -> p.getLocation().equals(delta.getResource().getLocation()))
-							.findFirst()
-							.map( p -> new ContainerItem(ContainerType.PROJECT, p, resourceMap,resourceHelper) )
-							.orElseGet( () -> new ContainerItem(ContainerType.DEFAULT, (IContainer) delta.getResource(), resourceMap, resourceHelper));
-					item.getChildren().add(pi);
-				}
-			}
-
-			if( PACK_PACKAGES ) {
-				if( item.getParent() == null ) {
-					System.err.println("This is a virtual node");
-				}
-			}
-
-		} else if( delta.getKind() == IResourceDelta.REMOVED ) {
-			if( delta.getResource() instanceof IProject ) {
-				viewer.getRoot().getChildren().removeIf( i -> delta.getResource().equals(i.getValue()) );
-			}
-			Optional<TreeItem<IResource>> opItem = getParentItem(delta.getResource());
-
-			if( opItem.isPresent() ) {
-				TreeItem<IResource> item = resourceMap.get(Paths.get(delta.getResource().getLocationURI()));
-				if( item != null ) {
-					opItem.get().getChildren().remove(item);
-					cleanItemRec(item);
-				}
-			}
-		}
-		return true;
-	}
-
-	private void cleanItemRec(TreeItem<IResource> item) {
-		if( item.getValue() != null ) {
-			resourceMap.values().remove(item.getValue());
-			for( TreeItem<IResource> c : item.getChildren() ) {
-				cleanItemRec(c);
-			}
-		}
-	}
-
+	
 	private void handleClick(MouseEvent e) {
-		if( e.getClickCount() > 1
-				&& viewer.getSelectionModel().getSelectedItem() != null
-				&& viewer.getSelectionModel().getSelectedItem().getValue() instanceof IFile) {
-			IFile f = (IFile) viewer.getSelectionModel().getSelectedItem().getValue();
-			editorOpener.openEditor("module-file:" + f.getProject().getName() + "/" + f.getProjectRelativePath());
+		if( e.getClickCount() > 1) {
+			vm.openEditorForSelectedNodes().execute();
 		}
 	}
-
-	private Optional<TreeItem<IResource>> getParentItem(IResource resource) {
-		if( resource.getLocationURI() != null ) {
-			TreeItem<IResource> item = resourceMap.get(Paths.get(resource.getLocationURI()).getParent());
-			if( item != null ) {
-				if( item.getValue().equals(resource.getParent()) ) {
-					return Optional.of(item);
-				}
-			}
-		}
-		return Optional.empty();
+	
+	private void handleSelectedItemChange(TreeItem<VM_ExplorerNode> v) {
+		vm.selectedNode().set( v != null ? v.getValue() : null);
 	}
-
-	private TreeItem<IResource> expandParentPath(IResource resource) {
-		TreeItem<IResource> item = viewer.getRoot();
-
-		List<IContainer> path = new ArrayList<>();
-		IContainer c = resource.getParent();
-		while( c != null && ! (c instanceof IProject) ) {
-			path.add(c);
-			c = c.getParent();
-		}
-		path.add(c);
-
-		for( int i = path.size() - 1; i >= 0; i-- ) {
-			IContainer r = path.get(i);
-			Optional<TreeItem<IResource>> first = item.getChildren().stream().filter( it -> it.getValue().equals(r) ).findFirst();
-			if( ! first.isPresent() ) {
-				break;
-			}
-			item = first.get();
-			item.setExpanded(true);
-		}
-		return item;
+	
+	private void handleSelectedItemsChange(Change<? extends TreeItem<VM_ExplorerNode>> c) {
+		List<VM_ExplorerNode> list = c.getList().stream()
+			.map( t -> t.getValue()).collect(Collectors.toList());
+		vm.selectedNodes().setAll(list);
 	}
+	
+	static class ContainerTreeItem extends LazyTreeItem<VM_ExplorerNode> {
 
-	private void setTreeSelection(IResource resource) {
-		if( resource != null ) {
-			TreeItem<IResource> item = expandParentPath(resource);
-
-			item.getChildren().stream().filter( it -> it.getValue() == resource).findFirst().ifPresent( it -> {
-				viewer.getSelectionModel().select(it);
-			} );
+		public ContainerTreeItem(VM_ContainerNode value) {
+			super(value, ModuleExplorer::createChildren);
 		}
 	}
-
-	static class ResourceTreeCell extends TreeCell<IResource> {
-		private List<String> currentStyleClass = new ArrayList<String>();
-
+	
+	static class FileTreeItem extends TreeItem<VM_ExplorerNode> {
+		public FileTreeItem(VM_FileNode value) {
+			super(value);
+		}
+	}
+	
+	static class ModuleExplorerTreeCell extends TreeCell<VM_ExplorerNode> {
+		private final List<String> currentStyleClass = new ArrayList<String>();
+		
+		public ModuleExplorerTreeCell(TreeView<VM_ExplorerNode> v) {
+			
+		}
+		
 		@Override
-		protected void updateItem(IResource item, boolean empty) {
+		protected void updateItem(VM_ExplorerNode item, boolean empty) {
 			super.updateItem(item, empty);
-
+			
+			textProperty().unbind();
+			
 			if( currentStyleClass != null ) {
 				getStyleClass().removeAll(currentStyleClass);
 				currentStyleClass.clear();
 			}
-
+			
+			if( item instanceof VM_ContainerNode ) {
+				currentStyleClass.add("folder-"+((VM_ContainerNode) item).type().getValue().name().toLowerCase());
+			} else if( item instanceof VM_FileNode ) {
+				currentStyleClass.add("file");
+			}
+			
 			if( item != null && ! empty ) {
-				if( getTreeItem() instanceof ContainerItem ) {
-					ContainerItem c = (ContainerItem) getTreeItem();
-					String prefix = c.emptyParentContainers.stream().map( i -> i.getValue().getName()).collect(Collectors.joining("."));
-					setText(prefix.length() == 0 ? c.getValue().getName() : prefix + "." + c.getValue().getName());
-					currentStyleClass.add("folder-"+c.type.name().toLowerCase());
-				} else {
-					setText(item.getName());
-					currentStyleClass.add("file");
-					if( item.getFileExtension() != null ) {
-						currentStyleClass.add(item.getFileExtension());
-					}
-
-				}
-
-				if( item.getName().startsWith(".") || item.isDerived() ) {
-					currentStyleClass.add("hidden");
-				}
-
+				textProperty().bind(item.label());
+				ImageView view = new ImageView();
+				setGraphic(view);
+				
 				if( ! currentStyleClass.isEmpty() ) {
 					getStyleClass().addAll(currentStyleClass);
 				}
-				ImageView view = new ImageView();
-				setGraphic(view);
 			} else {
 				setText(null);
 				setGraphic(null);
 			}
 		}
 	}
-
-	static class ContainerItem extends LazyTreeItem<IResource> {
-		private final ContainerType type;
-		private ObservableList<ContainerItem> emptyParentContainers = FXCollections.observableArrayList();
-
-		public ContainerItem(ContainerType type, IContainer container, Map<Path, TreeItem<IResource>> resourceMap, ResourceHelper helper) {
-			super(container,  self -> createChildren(self, resourceMap, helper));
-			this.type = type;
-			resourceMap.put(Paths.get(container.getLocationURI()), this);
-		}
-
-		public ObservableList<ContainerItem> getEmptyParentContainers() {
-			return emptyParentContainers;
-		}
-	}
-
-	static class FileItem extends TreeItem<IResource> {
-		public FileItem(IFile file, Map<Path, TreeItem<IResource>> resourceMap) {
-			super(file);
-			resourceMap.put(Paths.get(file.getLocationURI()), this);
-		}
-	}
-
-	static List<TreeItem<IResource>> createChildren(TreeItem<IResource> parentItem, Map<Path, TreeItem<IResource>> resourceMap, ResourceHelper helper) {
-		ObservableList<TreeItem<IResource>> rv = FXCollections.observableArrayList();
-		ContainerItem containerItem = (ContainerItem)parentItem;
-		IContainer container = (IContainer) containerItem.getValue();
-
-		try {
-			Stream<IContainer> memberStream = Stream.of(container.members()).filter( m -> m instanceof IContainer).map( m -> (IContainer)m);
-			if( containerItem.type == ContainerType.WORKSPACE ) {
-				memberStream = memberStream.filter( m -> helper.isRootProject((IProject) m));
+	
+	private static ObservableList<TreeItem<VM_ExplorerNode>> createChildren(TreeItem<VM_ExplorerNode> parent) {
+		ObservableList<TreeItem<VM_ExplorerNode>> rv = FXCollections.observableArrayList();
+		VM_ContainerNode c = (VM_ContainerNode) parent.getValue();
+		FXBindings.bindContent(rv, c.children(), n -> {
+			if( n instanceof VM_FileNode ) {
+				return new FileTreeItem((VM_FileNode) n);
+			} else if( n instanceof VM_ContainerNode ) {
+				return new ContainerTreeItem((VM_ContainerNode)n);
+			} else {
+				return new TreeItem<>(null);
 			}
-			rv.addAll(memberStream.sorted(Comparator.comparing( m -> m.getName())).map( i -> {
-				ContainerType type = ContainerType.DEFAULT;
-				List<ContainerItem> emptyContainers = new ArrayList<>();
-				if( containerItem.type == ContainerType.WORKSPACE ) {
-					type = ContainerType.PROJECT;
-				} else if( containerItem.type == ContainerType.SOURCE
-						|| containerItem.type == ContainerType.PACKAGE
-						|| containerItem.type == ContainerType.TEST) {
-					type = ContainerType.PACKAGE;
-
-					if( PACK_PACKAGES ) {
-						try {
-							while( i.members().length == 1 && i.members()[0] instanceof IFolder ) {
-								emptyContainers.add(new ContainerItem(type, i, resourceMap, helper));
-								i = (IContainer) i.members()[0];
-							}
-						} catch (CoreException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				} else if( containerItem.type == ContainerType.DEFAULT ) {
-					if( "java".equals(i.getName()) && i.getParent() != null ) {
-						if( i.getParent().getName().equals("main") ) {
-							type = ContainerType.SOURCE;
-						} else {
-							type = ContainerType.TEST;
-						}
-					}
-				} else if( containerItem.type == ContainerType.PROJECT ) {
-					IContainer fi = i;
-					ContainerItem pi = Stream.of(i.getWorkspace().getRoot().getProjects())
-						.filter( p -> p.getLocation().equals(fi.getLocation()))
-						.findFirst()
-						.map( p -> new ContainerItem(ContainerType.PROJECT, p, resourceMap,helper) )
-						.orElse(null);
-					if( pi != null ) {
-						return pi;
-					}
-				}
-				ContainerItem item = new ContainerItem(type, (IContainer) i, resourceMap, helper);
-				item.emptyParentContainers.setAll(emptyContainers);
-				return item;
-			}).collect(Collectors.toList()));
-		} catch (CoreException e) {
-			getLogger().error("Failure while reading folders from container '"+container+"'",e);
-		}
-
-		try {
-			rv.addAll(Stream.of(container.members())
-					.filter( m -> m instanceof IFile)
-					.sorted(Comparator.comparing( m -> m.getName()))
-					.map(i -> new FileItem((IFile)i,resourceMap))
-					.collect(Collectors.toList()));
-		} catch (CoreException e) {
-			getLogger().error("Failure while reading files from container '"+container+"'",e);
-		}
-
+		});
+		
 		return rv;
-	}
-
-	enum ContainerType {
-		WORKSPACE,
-		PROJECT,
-		SOURCE,
-		PACKAGE,
-		TEST,
-		DEFAULT
 	}
 }

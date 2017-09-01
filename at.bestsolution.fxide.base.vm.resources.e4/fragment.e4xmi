@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_aqrMQI8LEeeD1KPebiK1CA">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_enHMoI8LEeeD1KPebiK1CA" featurename="commands" parentElementId="org.eclipse.e4.application">
+    <elements xsi:type="commands:Command" xmi:id="_gtMvYI8LEeeD1KPebiK1CA" elementId="at.bestsolution.fxide.base.vm.resources.e4.command.openfiles" commandName="Open Files">
+      <parameters xmi:id="_ubjVwI8LEeeD1KPebiK1CA" elementId="fileURIs" name="File URIs" optional="false"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_leUVAI8LEeeD1KPebiK1CA" featurename="handlers" parentElementId="org.eclipse.e4.application">
+    <elements xsi:type="commands:Handler" xmi:id="_nsrqAI8LEeeD1KPebiK1CA" elementId="at.bestsolution.fxide.base.vm.resources.e4.handler.0" contributionURI="bundleclass://at.bestsolution.fxide.base.vm.resources.e4/at.bestsolution.fxide.base.vm.resources.e4.OpenFilesHandler" command="_gtMvYI8LEeeD1KPebiK1CA"/>
+  </fragments>
+</fragment:ModelFragments>

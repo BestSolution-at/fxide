@@ -1,4 +1,4 @@
-package at.bestsolution.fxide.base;
+package at.bestsolution.fxide.base.vm.resources;
 
 import java.util.ArrayList;
 import java.util.Arrays;
