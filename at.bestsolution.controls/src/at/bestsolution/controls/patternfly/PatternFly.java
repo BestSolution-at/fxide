@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Font;
 
 public class PatternFly {
@@ -39,6 +40,11 @@ public class PatternFly {
 	}
 
 	public static <N extends Button> N defaultButton(N node) {
+		node.getStyleClass().add("btn-default");
+		return node;
+	}
+	
+	public static <N extends ToggleButton> N defaultButton(N node) {
 		node.getStyleClass().add("btn-default");
 		return node;
 	}

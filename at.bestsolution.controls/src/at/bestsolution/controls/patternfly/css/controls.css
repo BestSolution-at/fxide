@@ -17,6 +17,17 @@
 	-fx-font-weight: bold;
 }
 
+.toggle-button.btn-default {
+	-fx-background-color: pf-button-default-background;
+	-fx-border-color: pf-button-default-border;
+	-fx-text-fill: pf-button-default-text;
+	-fx-font-weight: bold;
+}
+
+.toggle-button:selected.btn-default {
+	-fx-background-color: pf-toggle-button-default-background;
+}
+
 .button.btn-primary {
 	-fx-background-color: pf-button-primary-background;
 	-fx-border-color: pf-button-primary-border;

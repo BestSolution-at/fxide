@@ -30,6 +30,7 @@
 	pf-button-default-background: linear-gradient(to bottom,pf-black-100 0%,pf-black-200 100%);
 	pf-button-default-border: pf-black-400;
 	pf-button-default-text: pf-black-700;
+	pf-toggle-button-default-background: linear-gradient(to bottom,pf-black-300 0%,pf-black-200 100%);
 
 	pf-button-primary-background: linear-gradient(to bottom,pf-blue-300 0%,pf-blue-400 100%);
 	pf-button-primary-border: pf-black-500;
