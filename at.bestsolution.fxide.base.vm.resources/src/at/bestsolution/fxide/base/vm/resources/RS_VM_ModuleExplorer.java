@@ -172,11 +172,14 @@ public class RS_VM_ModuleExplorer implements VM_ModuleExplorer {
 	}
 	
 	public boolean visitDelta(IResourceDelta delta) throws CoreException {
+		getLogger().debugf("Visiting delta %s",delta);
 		if( delta.getKind() == IResourceDelta.ADDED ) {
 			if( delta.getResource() instanceof IProject ) {
 				if( resourceHelper.isRootProject((IProject) delta.getResource()) ) {
+					getLogger().debug("Adding a root project");
 					root._folders().add(new ContainerNode(root,ContainerType.PROJECT, (IContainer) delta.getResource(), resourceMap, resourceHelper));
 				} else {
+					getLogger().debug("Adding a sub project");
 					ContainerNode item = (ContainerNode) resourceMap.get(Paths.get(delta.getResource().getLocationURI()));
 					if( item != null ) {
 						ContainerNode owner = (ContainerNode) item.parent();

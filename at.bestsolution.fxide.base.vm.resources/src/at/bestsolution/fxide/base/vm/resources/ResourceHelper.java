@@ -32,11 +32,14 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.fx.core.log.Logger;
+import org.eclipse.fx.core.log.LoggerCreator;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service=ResourceHelper.class)
 public class ResourceHelper {
 	private Set<IProject> rootProjects;
+	private static Logger LOGGER;
 
 	public ResourceHelper() {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -62,6 +65,13 @@ public class ResourceHelper {
 		rootPaths.removeAll(subprojects);
 		this.rootProjects = new HashSet<>(rootPaths);
 	}
+	
+	private static Logger getLogger() {
+		if( LOGGER == null ) {
+			LOGGER = LoggerCreator.createLogger(ResourceHelper.class);
+		}
+		return LOGGER;
+	}
 
 	private void handleResourceChanged(IResourceChangeEvent event) {
 		try {
@@ -76,18 +86,33 @@ public class ResourceHelper {
 	}
 
 	public boolean visitDelta(IResourceDelta delta) throws CoreException {
+		getLogger().debugf("handle delta kind=%s resource=%s", delta.getKind(), delta);
 		if( delta.getKind() == IResourceDelta.ADDED ) {
+			getLogger().debug("This is an add operation");
 			if( delta.getResource() instanceof IProject ) {
-				if( isRootProject((IProject) delta.getResource()) ) {
+				getLogger().debug("delta is an IProject");
+				String check = delta.getResource().getLocationURI().toASCIIString();
+				boolean root = true;
+				for (IProject p : rootProjects) {
+					if( check.startsWith(p.getLocationURI().toASCIIString()) ) {
+						root = false;
+						break;
+					}
+				}
+				
+				if( root ) {
+					getLogger().debug("Adding a root project");
 					rootProjects.add((IProject) delta.getResource());
 				}
+				return false;
 			}
 		} else if( delta.getKind() == IResourceDelta.REMOVED ) {
 			if( delta.getResource() instanceof IProject ) {
 				rootProjects.remove(delta.getResource());
+				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	public boolean isRootProject(IProject project) {
