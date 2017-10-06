@@ -21,6 +21,7 @@ package at.bestsolution.fxide.base.vm;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import org.eclipse.fx.core.command.Command;
@@ -39,6 +40,11 @@ public interface VM_ModuleExplorer {
 	public ObjectProperty<VM_ExplorerNode> selectedNode();
 	public ObservableList<VM_ExplorerNode> selectedNodes();
 	public Command<Void> openEditorForSelectedNodes();
+	
+	public interface VM_ExplorerMenuItem {
+		public ReadOnlyStringProperty label();
+		public Command<Void> run(); 
+	}
 	
 	public interface VM_ExplorerNode {
 		public VM_ContainerNode parent();
